@@ -9,8 +9,8 @@ NUMFILTERS = 7;
 % 
 % scale = ones(1,NUMFILTERS);
 
-wtemp(1,:) = ApplySOS(mySOS, y(:,1)', 1);%((1./maxfoo)'));
-wtemp(2,:) = ApplySOS(mySOS, y(:,2)', 1);%((1./maxfoo)'));
+wtemp(1,:) = ApplySOS(mySOS, y(:,1)', maxfoo);
+wtemp(2,:) = ApplySOS(mySOS, y(:,2)', maxfoo);
 
 w = wtemp';
 

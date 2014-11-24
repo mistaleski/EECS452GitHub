@@ -1,27 +1,27 @@
 clear
+%% const
+filterNum = 7;
+fStandards = [63,160, 400,1e3,2.5e3, 6.3e3,15e3];
 fMin = 20; %Hz;
-fMinLog = log10(fMin);
 fMax = 20*10^3; %Hz
-fMaxLog = log10(fMax);
 
-fSpan = fMaxLog-fMinLog;
-numFilters = 8;
-fIncrement = fSpan/(numFilters);
+%% Analysis
+fStart = fMin;
 
-for i = 1:1:8
-    f(i) = (10^(fIncrement*i))*fMin;
-    if (i == 1)
-        Fc1 = 20;
+for i = 1:1:filterNum
+    if i ~=filterNum
+        fMiddleDB = (log10(fStandards(i+1)) +log10(fStandards(i)))/2;
+        fMiddle = 10^(fMiddleDB);
+        Fc1 = fStart;
+        Fc2 = fMiddle;
     else
-        Fc1 = f(i-1);
+        Fc1 = fStart;
+        Fc2 = fMax;
     end
-    Fc2 = f(i);        
-    
     Hd = FilterDesigner(Fc1,Fc2);
     coeffs = coeffs(Hd);
-    coeffArray(i,:) = coeffs.SOSMatrix; 
-    %figure(i);
-    %freqz(Hd);
+    coeffArray(i,:) = coeffs.SOSMatrix;
+    fStart = fMiddle;
     clear coeffs
     clear Hd
 end

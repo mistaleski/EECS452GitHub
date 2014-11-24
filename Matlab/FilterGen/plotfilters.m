@@ -28,26 +28,30 @@ FMAX = 20e3; % Hz
 SWEEPTIME = 5;
 
 [t, sweep] = makeSweep( FS, FMIN, FMAX, 0, SWEEPTIME );
-
+figure(1);
+tempFoo = abs(fft(sweep));
+loglog(tempFoo(1,1:length(tempFoo')/2))
 % Constants
-NUMFILTERS = 8;
+NUMFILTERS = 7;
 
-mySOS = MakeSOS(NUMFILTERS);
+mySOS = MakeSOS();
 
 scale = ones(1,NUMFILTERS);
-
+figure(3);
+hold on
 for i = 1:NUMFILTERS
-     y(i,:) = ApplySOS(mySOS(i,:), sweep, scale)*NUMFILTERS;
-     if i == 1
-         hold on
-     end
-     blah = fft(y(i,:));
+     y(i,:) = ApplySOS(mySOS(i,:), sweep, scale).*NUMFILTERS;
+%      if i == 1
+%          hold on
+%      end
+     blah = abs(fft(y(i,:)));
      maxfoo(i) = max(blah);
+     plot(blah);
 end
 
 figure(2);
 for i = 1:NUMFILTERS
-    x = (ApplySOS(mySOS(i,:), sweep, scale)*NUMFILTERS)./maxfoo(i);
+    x = (ApplySOS(mySOS(i,:), sweep, scale)*NUMFILTERS);%./maxfoo(i);
      %plotFFT( fft(x), 1, 1, 1, 1, 'comparison', FS );
      theFFT = abs(fft(x));
      indices = 1:(length(theFFT)/2);
@@ -58,4 +62,4 @@ for i = 1:NUMFILTERS
      loglog((1/sqrt(2))*ones((length(theFFT)/2),1), 'r')
 end
 
-axis([20 20e3 1e-1 0.2e1])
+%axis([20 20e3 1e-1 0.2e1])
