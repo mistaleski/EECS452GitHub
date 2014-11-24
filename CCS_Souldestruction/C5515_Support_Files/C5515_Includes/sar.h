@@ -22,9 +22,13 @@
 #define SW12  0x195  // Switch 1 + 2 value
 #define NoKey 0x3FE
 
+#define ADCBUSY 0x8000
+
 /* ------------------------------------------------------------------------ *
  *  Prototypes                                                              *
  * ------------------------------------------------------------------------ */
 void Init_SAR(void);
 Uint16 Get_Sar_Key(void);
 Uint16 Get_Key_Human(void);
+
+void Read_all(Uint16 *data);

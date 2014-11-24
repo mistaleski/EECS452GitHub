@@ -29,31 +29,7 @@ void Init_SAR(void)
     return;
 }
 
-void Read_GPAIN1(void)
-{
-    Uint16 val, i;
 
-    for(i=0;i<30; i++)
-        asm("	nop");     
-
-    while(1)
-    {
-        
-        for(i=0;i<100; i++)
-            asm("	nop");     
-
-		*SARCTRL = 0xB400;     
-
-        while(1)
-        {
-            for(i=0;i<50; i++)
-                asm("	nop");     
-            val = *SARDATA;
-            if((val&0x8000) == 0)
-                break;
-        }
-    }
-}
 /* ------------------------------------------------------------------------ *
  *                                                                          *
  *   Get_Sar_Key(void)                                                      *
