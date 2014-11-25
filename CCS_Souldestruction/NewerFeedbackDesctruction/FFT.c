@@ -66,9 +66,6 @@ void showFFT(Int32 *maxIndex, Int32 *max)
 	Int32 tmp,tmp2;
 	Uint16 n;
 
-    *max = 0;
-	*maxIndex = 512;
-
 	//Find magnitude of X(n/2).
 	GoTo(100,0);
 	for (n = 0; n < FFTSIZE; n = n + 2)

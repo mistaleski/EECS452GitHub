@@ -53,6 +53,7 @@ Int16 IIR_DF1(Int16 input, Int16 *_biq, Int16 *delay_buff) {
 
 void initFilter(Int16 *_biq)
 {
+	/// set gain to 1 >> pass-through
 	_biq[0] =  16384;		//b0
 	_biq[1] =  0;		//b1
 	_biq[2] =  0;		//b2

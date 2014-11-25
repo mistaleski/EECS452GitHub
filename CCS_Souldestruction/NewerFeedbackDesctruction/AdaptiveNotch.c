@@ -14,7 +14,7 @@ Uint8 next_buff;
 
 Int32 didRepeat,fftBin;
 
-void stepNotch(Int16 max, Int16 maxIndex)
+void stepNotch(Int32 max, Int32 maxIndex)
 {
 
 	if (max>_FEEDBACK_THRESHOLD && didRepeat == 0)
@@ -50,17 +50,15 @@ void stepNotch(Int16 max, Int16 maxIndex)
 }
 
 
-Int16 applyNotches(Int16 in)
+void applyNotches(Int16 *in)
 {
 	Uint8 i;
-	Uint16 temp = in;
 
 	for(i = 0; i < NUM_CANCELERS; i++)
 	{
-		temp = IIR_DF1(temp, &biq[NUM_CANCELERS*i], &cancelBuffs[4*i]);
+		*in = IIR_DF1(*in, &biq[NUM_CANCELERS*i], &cancelBuffs[4*i]);
 	}
 
-	return temp;
 }
 
 
@@ -68,11 +66,17 @@ void initNotches()
 {
 	Uint8 i;
 
+	// Set filters to pass-throughs, clear internal state
 	for(i =0; i<NUM_CANCELERS; i++)
 	{
 		initFilter(&biq[NUM_CANCELERS*i]);
 		filterCenter[i] = 512;
+		cancelBuffs[4*i + 0] = 0;
+		cancelBuffs[4*i + 1] = 0;
+		cancelBuffs[4*i + 2] = 0;
+		cancelBuffs[4*i + 3] = 0;
 	}
+
 	next_buff = 0;
     didRepeat = 0;
     fftBin = 0;
@@ -92,8 +96,8 @@ void drawNotches()
 	{
 		if(filterCenter[i] != 512)
 		{
-			GoTo(filterCenter[i]-20+100,(_FEEDBACK_THRESHOLD >>4)-_FEEDBACK_FREQUENCY_TOLERANCE);
-			Draw(BLUE,filterCenter[i]+20+100, (_FEEDBACK_THRESHOLD >>4)-_FEEDBACK_FREQUENCY_TOLERANCE);
+			GoTo(filterCenter[i]-_NOTCH_LINE_SIZE+100,(_FEEDBACK_THRESHOLD >>4)-_FEEDBACK_FREQUENCY_TOLERANCE);
+			Draw(BLUE,filterCenter[i]+_NOTCH_LINE_SIZE+100, (_FEEDBACK_THRESHOLD >>4)-_FEEDBACK_FREQUENCY_TOLERANCE);
 		}
 	}
 }

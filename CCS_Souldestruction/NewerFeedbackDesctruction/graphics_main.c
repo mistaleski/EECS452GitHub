@@ -35,6 +35,7 @@ interrupt void I2S_ISR()
 {
 	Int16 x[1];
 	Int16  left;
+	Uint16 i;
 	//AIC_read2(&left,x);
 	AIC_read2(x,&left);
 	AIC_write2(output,output);
@@ -48,8 +49,7 @@ interrupt void I2S_ISR()
 
 	if(filterOn)
 	{
-
-		output = applyNotches(&output);
+		applyNotches(&output);
 	}
 
 
@@ -137,8 +137,8 @@ void main(void)
 
 			// ---- Update display ----
 			XVGAinit(start_switch);
-		    drawThreshold();
-		    drawNotches();
+		    max = 0;
+			maxIndex = 512;
 			showFFT(&maxIndex, &max); // extract max value and index
 			start_switch = 0;
 
@@ -146,6 +146,8 @@ void main(void)
 			if(filterOn)
 			{
 				stepNotch(max, maxIndex);
+			    drawThreshold();
+			    drawNotches();
 			}
 		}
     }

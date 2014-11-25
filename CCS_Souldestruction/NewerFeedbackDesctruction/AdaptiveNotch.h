@@ -19,6 +19,7 @@
 #define _FEEDBACK_THRESHOLD 4000
 #define _FEEDBACK_FREQUENCY_TOLERANCE 5
 #define _MAXFREQ_REPEATS_THRESHOLD 5
+#define _NOTCH_LINE_SIZE 5
 
 /**
  * Performs the next step of the adaptive notch filter calculation
@@ -36,14 +37,14 @@
  * @param max is the last calculated maximum value of the FFT
  * @param maxIndex is the index of the last calculated maximum value of the FFT
  */
-void stepNotch(Int16 max, Int16 maxIndex);
+void stepNotch(Int32 max, Int32 maxIndex);
 
 /**
  * Applies notch filters to an input
  * @param *in points to the next sample of audio input (one value)
  * @return Returns the output of the notch filter bank
  */
-Int16 applyNotches(Int16 in);
+void applyNotches(Int16 *in);
 
 /**
  * Initializes notch filters and sets their centers to a sentinel value, indicating disable
