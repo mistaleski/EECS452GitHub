@@ -83,14 +83,14 @@ void Read_all(Uint16 *data)
     Uint16 val, i, j,failsafe;
 
 	// Poll each channel
-	for(i=0; i<5; ++i )
+	for(i=0; i<4; ++i )
 	{
 
 		failsafe = 1000;
 		// Wait for previous conversion to finish
 		while((*SARDATA) & ADCBUSY);
 
-		*SARCTRL = addrs[i];//(void*)(addrs[i]);
+		*SARCTRL = 0x0C00 + ((i+2) & 7) << 12;//(void*)(addrs[i]);
 
 		*SARCTRL |= 0x8000;
 
@@ -146,14 +146,14 @@ void main(void)
     InitSpi();
     Init_SAR();
 
-    Uint16 data[5];
+    Uint16 data[4];
 
     *SARPINCTRL &= ~0x8000;
 
     while(FOREVER)
     {
     	Read_all(data);
-    	printf("%05d\t%05d\t%05d\t%05d\t%05d\n\n", data[0],data[1],data[2],data[3],data[4]);
+    	printf("%05d\t%05d\t%05d\t%05d\n\n", data[0],data[1],data[2],data[3]);
     }
 
         TERMINATE:
