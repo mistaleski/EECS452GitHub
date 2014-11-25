@@ -1,4 +1,4 @@
-function [Hd] = FilterDesigner(Fc1,Fc2)
+function [Hd] = FilterDesigner(Fc1,Fc2,numBQ)
 %FILTERDESIGNER Returns a discrete-time filter object.
 
 % MATLAB Code
@@ -10,7 +10,7 @@ function [Hd] = FilterDesigner(Fc1,Fc2)
 % All frequency values are in Hz.
 Fs = 48000;  % Sampling Frequency
 
-N   = 2;       % Order
+N   = numBQ*2;       % Order
 %Fc1 = 0.001;   % First Cutoff Frequency
 %Fc2 = 3.4485;  % Second Cutoff Frequency
 

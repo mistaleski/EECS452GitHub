@@ -29,42 +29,47 @@ for i = 1:NUMFILTERS
 end
 
 figure(3);
-
+colorHolder = ['k';  'r';  'b'; 'c';  'm'; ];
 for i = 1:NUMFILTERS
-    x = ApplySOS(mySOS(i,:), sweep, scale)./maxfoo(i);
-     theFFT = abs(fft(x));
+    x = ApplySOS(mySOS(i,:), sweep, scale)./maxfoo(i)./Ave;
+     theFFT = 20.*log10(abs(fft(x)));
      indices = 1:(length(theFFT)/2);
-     loglog( ((indices-1)/length(theFFT))*FS, theFFT(1:(length(theFFT)/2)));
+     semilogx( ((indices-1)/length(theFFT))*FS, theFFT(1:(length(theFFT)/2)), colorHolder(i));
      if i == 1
          hold on
      end
-     loglog(Ave*ones((length(theFFT)/2),1), 'r')
+     %loglog(Ave*ones((length(theFFT)/2),1), 'r')
 end
 
-axis([20 20e3 1e-1 3e2])
-
+axis([20 20e3 -10 1])
+xlabel('frequency (20Hz-20kHz)');
+ylabel('magnitude (dB)');
+title('3 Band Frequency EQ non adjust Middle Bands');
 
 figure(4);
 
-colorHolder = ['k';  'r';  'b'; 'c';  'm'; ];
+colorHolder = ['k';  'r';  'b'; 'c';  'm' ];
 colorHolderdash = [':k';':r'; ':b';':c';':m'];
 Plus20dBlin = 10^(8/20);
 Minus20dBlin = 10^(-8/20);
 
-for i = 1:NUMFILTERS
-     xMax1 = ApplySOS(mySOS(i,:), sweep, scale)./maxfoo(i).*Plus20dBlin;
-     xMin1 = ApplySOS(mySOS(i,:), sweep, scale)./maxfoo(i).*Minus20dBlin;
+for i = 1:2:NUMFILTERS
+     xMax1 = ApplySOS(mySOS(i,:), sweep, scale)./maxfoo(i).*Plus20dBlin./Ave;
+     xMin1 = ApplySOS(mySOS(i,:), sweep, scale)./maxfoo(i).*Minus20dBlin./Ave;
      theFFTMax = abs(fft(xMax1));
      theFFTMin = abs(fft(xMin1));
      
      indices = 1:(length(theFFTMax)/2);
-     loglog( ((indices-1)/length(theFFTMax))*FS, theFFTMax(1:(length(theFFTMax)/2)), colorHolder(i));
+     semilogx( ((indices-1)/length(theFFTMax))*FS, 20.*log10(theFFTMax(1:(length(theFFTMax)/2))), colorHolder(i));
      if i ==1
         hold on 
      end
-     loglog( ((indices-1)/length(theFFTMin))*FS, theFFTMin(1:(length(theFFTMin)/2)), colorHolderdash(i,:));
+     semilogx( ((indices-1)/length(theFFTMin))*FS, 20.*log10(theFFTMin(1:(length(theFFTMin)/2))), colorHolderdash(i,:));
      
 end
-loglog(Ave*ones((length(theFFTMax)/2),1), 'r')
+%loglog(Ave*ones((length(theFFTMax)/2),1), 'r')
 
-axis([20 20e3 1e-1 10e2])
+axis([20 20e3 -30 10])
+xlabel('frequency (20Hz-20kHz)');
+ylabel('magnitude (dB)');
+title('3 Band Frequency EQ +/-8dB');

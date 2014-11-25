@@ -1,4 +1,4 @@
-function [ SOS ] = MakeSOS( )
+function [ SOS ] = MakeSOS(numBQ )
 
 %% const
 filterNum = 7;
@@ -18,12 +18,15 @@ for i = 1:1:filterNum
         Fc1 = fStart;
         Fc2 = fMax;
     end
-    Hd = FilterDesigner(Fc1,Fc2);
+    Hd = FilterDesigner(Fc1,Fc2,numBQ);
     coeffsFoo = coeffs(Hd);
-    coeffArray(i,:) = coeffsFoo.SOSMatrix;
+    for j = 1:1:numBQ
+        coeffArray((i-1)*numBQ+j,:) = coeffsFoo.SOSMatrix(j,:);
+    end
     fStart = fMiddle;
     clear coeffs
     clear Hd
+        
 end
 
 SOS = coeffArray;

@@ -14,13 +14,13 @@
 
 #define BIQ_COEFF 6
 
-#define ADJUST_BAND_1 = 123 //multiply by band
-#define ADJUST_BAND_2 = 249
-#define ADJUST_BAND_3 = 663
-#define ADJUST_BAND_4 = 1664
-#define ADJUST_BAND_5 = 3934
-#define ADJUST_BAND_6 = 8241
-#define ADJUST_BAND_7 = 12925
+#define ADJUST_BAND_1 = 1 //multiply by band
+#define ADJUST_BAND_2 = 2
+#define ADJUST_BAND_3 = 16
+#define ADJUST_BAND_4 = 100
+#define ADJUST_BAND_5 = 575
+#define ADJUST_BAND_6 = 2650
+#define ADJUST_BAND_7 = 6707
 
 
 Int16 IIR_DF1(Int16 input, Int16 *_biq, Int16 *delay_buff);
