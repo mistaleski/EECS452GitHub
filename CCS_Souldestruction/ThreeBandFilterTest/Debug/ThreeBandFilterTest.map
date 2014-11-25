@@ -1,0 +1,367 @@
+******************************************************************************
+              TMS320C55x Linker PC v4.4.1                      
+******************************************************************************
+>> Linked Tue Nov 25 03:32:56 2014
+
+OUTPUT FILE NAME:   <ThreeBandFilterTest.out>
+ENTRY POINT SYMBOL: "_c_int00"  address: 00021545
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+                        (bytes)   (bytes)    (bytes)   (bytes)
+----------------------  --------  ---------  --------  --------  ----  --------
+PAGE 0:
+  MMR                   00000000   000000c0  00000000  000000c0  RWIX
+  DARAM0                000000c0   0000ff40  00006d3a  00009206  RWIX
+  SARAM0                00010000   00010000  00000000  00010000  RWIX
+  SARAM1                00020000   00020000  000015a8  0001ea58  RWIX
+  SARAM2                00040000   0000fe00  0000005a  0000fda6  RWIX
+  VECS                  0004fe00   00000200  00000100  00000100  RWIX
+  PDROM                 00ff8000   00008000  00000000  00008000  R IX
+
+PAGE 2:
+  IOPORT                00000000   00020000  00000000  00020000  RWI 
+
+
+SECTION ALLOCATION MAP
+(Addresses surrounded by []'s are displayed for convenience only!)
+
+output                                                          attributes/
+section   page  orgn(bytes) orgn(words) len(bytes) len(words)   input sections
+--------  ----  ----------- ----------- ---------- ----------   --------------
+.pinit       0   [ 00040000 ]  00020000          *   00000000   UNINITIALIZED
+
+.stack       0   [ 000000c0 ]  00000060          *   00001000   UNINITIALIZED
+                 [ 000000c0 ]  00000060          *   00001000   --HOLE--
+
+.sysstack 
+*            0   [ 000020c0 ]  00001060          *   00000800   UNINITIALIZED
+                 [ 000020c0 ]  00001060          *   00000800   --HOLE--
+
+.const       0   [ 000030c0 ]  00001860          *   00001a47   
+                 [ 000030c0 ]  00001860          *   00001800   tunable_filter.obj (.const:_filters)
+                 [ 000060c0 ]  00003060          *   00000200   FFT.obj (.const:_chebwin512)
+                 [ 000064c0 ]  00003260          *   0000003c   tunable_ThreeBandfilter.obj (.const:_ThreeBandfilters)
+                 [ 00006538 ]  0000329c          *   00000006   graphics_main.obj (.const:__biq)
+                 [ 00006544 ]  000032a2          *   00000005   graphics_main.obj (.const:_$P$T0$1)
+
+.data        0   [ 0000654e ]  000032a7          *   00000400   
+                 [ 0000654e ]  000032a7          *   00000400   55xdspx_LARGE.lib : twiddle.obj (.data:twiddle)
+
+.bss         0   [ 00006d50 ]  000036a8          *   00000056   UNINITIALIZED
+                 [ 00006d50 ]  000036a8          *   0000002a   AdaptiveNotch.obj (.bss)
+                 [ 00006da4 ]  000036d2          *   0000000c   noise_gate.obj (.bss)
+                 [ 00006dbc ]  000036de          *   00000008   FFT.obj (.bss)
+                 [ 00006dcc ]  000036e6          *   00000007   graphics_main.obj (.bss)
+                 [ 00006dda ]  000036ed          *   00000001   XVGA.obj (.bss)
+                 [ 00006ddc ]  000036ee          *   00000004   55xdspx_LARGE.lib : cfft_scale.obj (.bss)
+                 [ 00006de4 ]  000036f2          *   00000004   rts55x.lib : _lock.obj (.bss)
+                 [ 00006dec ]  000036f6          *   00000004              : exit.obj (.bss)
+                 [ 00006df4 ]  000036fa          *   00000003   452_Labs_Essentials.lib : sar.obj (.bss)
+                 [ 00006dfa ]  000036fd          *   00000001   usbstk5515bsl.lib : usbstk5515_i2c.obj (.bss)
+
+.text        0     00020000  [ 00010000 ] 000015a8          *   
+                   00020000  [ 00010000 ] 00000230          *   452_Labs_Essentials.lib : sar.obj (.text)
+                   00020230  [ 00010118 ] 00000223          *                           : AIC_func.obj (.text)
+                   00020453  [ 00010229+] 000001ee          *   55xdspx_LARGE.lib : cfft_scale.obj (.text)
+                   00020641  [ 00010320+] 000001c7          *   AdaptiveNotch.obj (.text)
+                   00020808  [ 00010404 ] 000001b4          *   FFT.obj (.text)
+                   000209bc  [ 000104de ] 000001a7          *   noise_gate.obj (.text)
+                   00020b63  [ 000105b1+] 0000015e          *   graphics_main.obj (.text)
+                   00020cc1  [ 00010660+] 00000156          *   usbstk5515bsl.lib : usbstk5515_gpio.obj (.text)
+                   00020e17  [ 0001070b+] 0000013e          *                     : usbstk5515_i2c.obj (.text)
+                   00020f55  [ 000107aa+] 000000de          *   55xdspx_LARGE.lib : cbrev.obj (.text:cbrev)
+                   00021033  [ 00010819+] 000000af          *   tunable_ThreeBandfilter.obj (.text)
+                   000210e2  [ 00010871 ] 000000af          *   tunable_filter.obj (.text)
+                   00021191  [ 000108c8+] 000000a1          *   rts55x.lib : divul.obj (.text)
+                   00021232  [ 00010919 ] 00000080          *   Spi.obj (.text)
+                   000212b2  [ 00010959 ] 0000007e          *   XVGA.obj (.text)
+                   00021330  [ 00010998 ] 00000054          *   usbstk5515bsl.lib : usbstk5515.obj (.text)
+                   00021384  [ 000109c2 ] 00000053          *   LED.obj (.text)
+                   000213d7  [ 000109eb+] 00000050          *   C5515_eZdsp.obj (.text)
+                   00021427  [ 00010a13+] 0000004d          *   rts55x.lib : autoinit.obj (.text)
+                   00021474  [ 00010a3a ] 0000004b          *              : args_main.obj (.text)
+                   000214bf  [ 00010a5f+] 00000048          *              : divli.obj (.text)
+                   00021507  [ 00010a83+] 0000003e          *              : exit.obj (.text)
+                   00021545  [ 00010aa2+] 00000034          *              : boot.obj (.text)
+                   00021579  [ 00010abc+] 00000013          *              : lmpy.obj (.text)
+                   0002158c  [ 00010ac6 ] 00000012          *              : _lock.obj (.text)
+                   0002159e  [ 00010acf ] 00000007          *              : exit.obj (.text:CIO_breakpoint)
+                   000215a5  [ 00010ad2+] 00000002          *              : vectors.obj (.text)
+                   000215a7  [ 00010ad3 ] 00000001          *   --HOLE-- [fill = 20]
+
+.cinit       0   [ 00040000 ]  00020000          *   0000002d   
+                 [ 00040000 ]  00020000          *   0000000c   452_Labs_Essentials.lib : sar.obj (.cinit)
+                 [ 00040018 ]  0002000c          *   0000000a   rts55x.lib : _lock.obj (.cinit)
+                 [ 0004002c ]  00020016          *   0000000a              : exit.obj (.cinit)
+                 [ 00040040 ]  00020020          *   00000004   XVGA.obj (.cinit)
+                 [ 00040048 ]  00020024          *   00000004   noise_gate.obj (.cinit)
+                 [ 00040050 ]  00020028          *   00000004   usbstk5515bsl.lib : usbstk5515_i2c.obj (.cinit)
+                 [ 00040058 ]  0002002c          *   00000001   --HOLE-- [fill = 0]
+
+vectors      0     0004fe00  [ 00027f00 ] 00000100          *   
+                   0004fe00  [ 00027f00 ] 00000100          *   rts55x.lib : vectors.obj (vectors)
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+abs. value/
+byte addr   word addr   name
+---------   ---------   ----
+00000002                $TI_capability$C5500$CallingConvention
+00000002                $TI_capability$C5500$MemoryModel
+00000001                $TI_capability_requires_rev3
+ffffffff                .bss
+ffffffff                .data
+ffffffff                .text
+0002159f                C$$EXIT
+00021579                I$$LMPY
+00020230                _AIC3204_rset
+00020252                _AIC_init
+0002044c                _AIC_off
+000203f4                _AIC_read2
+00020427                _AIC_write2
+0002141f                _ConfigPort
+000212ff                _Draw
+00020928                _FFTready
+00020808                _FFracSqrt
+00020192                _Get_Key_Human
+00020089                _Get_Sar_Key
+000212e3                _GoTo
+00020b6f                _I2S_interrupt_setup
+00021152                _IIR_DF1
+000210a3                _IIR_DF1_2
+00021276                _InitSpi
+000213d7                _InitSystem
+00020000                _Init_SAR
+000213bd                _My_LED_init
+00020018                _Read_GPAIN1
+00020c56                _Read_all
+0004fe00                _Reset
+00021232                _SPIsend
+00021232                _TX_Put
+00020dbf                _USBSTK5515_GPIO_getInput
+00020cc1                _USBSTK5515_GPIO_init
+00020cc5                _USBSTK5515_GPIO_setDirection
+00020d42                _USBSTK5515_GPIO_setOutput
+00020e36                _USBSTK5515_I2C_close
+00020e17                _USBSTK5515_I2C_init
+00020edc                _USBSTK5515_I2C_read
+00020e3f                _USBSTK5515_I2C_reset
+00020e4d                _USBSTK5515_I2C_write
+00021376                _USBSTK5515_init
+00021330                _USBSTK5515_wait
+00021364                _USBSTK5515_waitusec
+000212b2                _XVGAinit
+00020b9a                __IIR
+            00001060    __STACK_END
+00002000                __STACK_SIZE
+00001000                __SYSSTACK_SIZE
+00000001                __TI_args_main
+ffffffff                ___binit__
+ffffffff                ___bss__
+ffffffff                ___c_args__
+            00020000    ___cinit__
+ffffffff                ___data__
+ffffffff                ___edata__
+ffffffff                ___end__
+ffffffff                ___etext__
+ffffffff                ___pinit__
+ffffffff                ___text__
+00021474                __args_main
+            000036f6    __cleanup_ptr
+000214bf                __divli
+00021191                __divul
+            000036f8    __dtors_ptr
+            000036f2    __lock
+00021579                __mpyli
+0002159c                __nop
+00021594                __register_lock
+0002158c                __register_unlock
+            00000060    __stack
+            00001060    __sysstack
+            000036f4    __unlock
+0002159e                _abort
+000207d7                _applyNotches
+00021427                _auto_init
+            000036ae    _biq
+00021545                _c_int00
+            000036c0    _cancelBuffs
+00020f55                _cbrev
+00020453                _cfft_SCALE
+            000036e9    _delay_buff
+            000036ce    _didRepeat
+00020788                _drawNotches
+00020768                _drawThreshold
+00021507                _exit
+            000036d0    _fftBin
+            000036de    _fftCounter
+            000036a8    _filterCenter
+            000036e8    _filterOn
+            000036e7    _gateOn
+            000036fd    _i2c_timeout
+000209a2                _initFFT
+0002113c                _initFilter
+0002108d                _initFilter2
+00020722                _initNotches
+            000036fb    _keyCnt1
+            000036fc    _keyCnt2
+00020be5                _main
+            000036cc    _next_buff
+000209bc                _noise_gate
+00020b4e                _noise_gate_default
+            000036e6    _output
+            000036e0    _pAIC
+            000036e4    _pDONE
+            000036e2    _pFFT
+            000036ed    _pages
+            000036fa    _preKey
+0002093c                _processFFT
+000208f1                _queueFFT
+00020b63                _readCh3
+000210e2                _redefineFilter
+00021033                _redefineFilter2
+00020834                _showFFT
+00020641                _stepNotch
+00021384                _toggle_LED
+ffffffff                binit
+            00020000    cinit
+ffffffff                edata
+ffffffff                end
+ffffffff                etext
+ffffffff                pinit
+            000032a7    twiddle
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+abs. value/
+byte addr   word addr   name
+---------   ---------   ----
+00000001                $TI_capability_requires_rev3
+00000001                __TI_args_main
+00000002                $TI_capability$C5500$CallingConvention
+00000002                $TI_capability$C5500$MemoryModel
+            00000060    __stack
+00001000                __SYSSTACK_SIZE
+00002000                __STACK_SIZE
+            00001060    __STACK_END
+            00001060    __sysstack
+            000032a7    twiddle
+            000036a8    _filterCenter
+            000036ae    _biq
+            000036c0    _cancelBuffs
+            000036cc    _next_buff
+            000036ce    _didRepeat
+            000036d0    _fftBin
+            000036de    _fftCounter
+            000036e0    _pAIC
+            000036e2    _pFFT
+            000036e4    _pDONE
+            000036e6    _output
+            000036e7    _gateOn
+            000036e8    _filterOn
+            000036e9    _delay_buff
+            000036ed    _pages
+            000036f2    __lock
+            000036f4    __unlock
+            000036f6    __cleanup_ptr
+            000036f8    __dtors_ptr
+            000036fa    _preKey
+            000036fb    _keyCnt1
+            000036fc    _keyCnt2
+            000036fd    _i2c_timeout
+00020000                _Init_SAR
+00020018                _Read_GPAIN1
+00020089                _Get_Sar_Key
+00020192                _Get_Key_Human
+00020230                _AIC3204_rset
+00020252                _AIC_init
+000203f4                _AIC_read2
+00020427                _AIC_write2
+0002044c                _AIC_off
+00020453                _cfft_SCALE
+00020641                _stepNotch
+00020722                _initNotches
+00020768                _drawThreshold
+00020788                _drawNotches
+000207d7                _applyNotches
+00020808                _FFracSqrt
+00020834                _showFFT
+000208f1                _queueFFT
+00020928                _FFTready
+0002093c                _processFFT
+000209a2                _initFFT
+000209bc                _noise_gate
+00020b4e                _noise_gate_default
+00020b63                _readCh3
+00020b6f                _I2S_interrupt_setup
+00020b9a                __IIR
+00020be5                _main
+00020c56                _Read_all
+00020cc1                _USBSTK5515_GPIO_init
+00020cc5                _USBSTK5515_GPIO_setDirection
+00020d42                _USBSTK5515_GPIO_setOutput
+00020dbf                _USBSTK5515_GPIO_getInput
+00020e17                _USBSTK5515_I2C_init
+00020e36                _USBSTK5515_I2C_close
+00020e3f                _USBSTK5515_I2C_reset
+00020e4d                _USBSTK5515_I2C_write
+00020edc                _USBSTK5515_I2C_read
+00020f55                _cbrev
+00021033                _redefineFilter2
+0002108d                _initFilter2
+000210a3                _IIR_DF1_2
+000210e2                _redefineFilter
+0002113c                _initFilter
+00021152                _IIR_DF1
+00021191                __divul
+00021232                _SPIsend
+00021232                _TX_Put
+00021276                _InitSpi
+000212b2                _XVGAinit
+000212e3                _GoTo
+000212ff                _Draw
+00021330                _USBSTK5515_wait
+00021364                _USBSTK5515_waitusec
+00021376                _USBSTK5515_init
+00021384                _toggle_LED
+000213bd                _My_LED_init
+000213d7                _InitSystem
+0002141f                _ConfigPort
+00021427                _auto_init
+00021474                __args_main
+000214bf                __divli
+00021507                _exit
+00021545                _c_int00
+00021579                I$$LMPY
+00021579                __mpyli
+0002158c                __register_unlock
+00021594                __register_lock
+0002159c                __nop
+0002159e                _abort
+0002159f                C$$EXIT
+            00020000    ___cinit__
+            00020000    cinit
+0004fe00                _Reset
+ffffffff                .bss
+ffffffff                .data
+ffffffff                .text
+ffffffff                ___binit__
+ffffffff                ___bss__
+ffffffff                ___c_args__
+ffffffff                ___data__
+ffffffff                ___edata__
+ffffffff                ___end__
+ffffffff                ___etext__
+ffffffff                ___pinit__
+ffffffff                ___text__
+ffffffff                binit
+ffffffff                edata
+ffffffff                end
+ffffffff                etext
+ffffffff                pinit
+
+[123 symbols]

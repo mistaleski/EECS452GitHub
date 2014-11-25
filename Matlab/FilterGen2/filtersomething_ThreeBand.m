@@ -12,7 +12,10 @@ Plus20dBlin = 10^(8/20);
 Minus20dBlin = 10^(-8/20);
 
 maxfooBar =maxfoo(:);
-maxfooBar(1) = maxfooBar(1)./Plus20dBlin;
+maxfooBar(1) = maxfooBar(1);
+% for(i = 2:1:5)
+%    maxfooBar(i) = 1000; 
+% end
 %maxfooBar(2) = maxfooBar(2)/15;
 %maxfooBar(4) = maxfooBar(4)*20;
 %maxfooBar(5) = maxfooBar(5)/20;
@@ -24,8 +27,8 @@ wtemp(2,:) = ApplySOS(mySOS, y(:,2)', maxfooBar);
 w = wtemp';
 
 %From Wakefield demo 1
-aP = audioplayer(y.*Minus20dBlin,fs);
-playblocking(aP);
+%aP = audioplayer(y,fs);
+%playblocking(aP);
 disp('Other one');
 
 aP2 = audioplayer(w,fs);

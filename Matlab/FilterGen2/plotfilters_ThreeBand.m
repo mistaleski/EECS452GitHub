@@ -19,12 +19,16 @@ mySOS = MakeSOS_ThreeBand();
 
 scale = ones(1,NUMFILTERS);
 figure(2);
+hold on
 
 for i = 1:NUMFILTERS
      y(i,:) = ApplySOS(mySOS(i,:), sweep, scale);
      blah = abs(fft(y(i,:)));
      maxfoo(i) = max(blah)/250;
-     loglog(blah);
+     [b2,a2] = sos2tf(mySOS(i,:));
+     [h2,w2] = freqz(b2./maxfoo(i),a2,2001);
+     plot(w2/pi,20.*log10(h2));
+     %loglog(blah);
      hold on
 end
 
