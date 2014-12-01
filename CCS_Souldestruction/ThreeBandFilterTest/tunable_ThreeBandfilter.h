@@ -14,22 +14,6 @@
 
 #define BIQ_COEFF 6
 
-#define ADJUST_BAND_1  99 //multiply by band
-#define ADJUST_BAND_2  684
-#define ADJUST_BAND_3  6683
-#define ADJUST_BAND_4  7374
-#define ADJUST_BAND_5  12655
-
-static const Int32 Adjust[5] =
-{
-		ADJUST_BAND_1,
-		ADJUST_BAND_2,
-		ADJUST_BAND_3,
-		ADJUST_BAND_4,
-		ADJUST_BAND_5
-};
-
-
 Int16 IIR_DF1_2(Int16 input, Int16 *_biq, Int16 *delay_buff);
 void redefineFilter2(Uint16 FILTER_SELECT, Int16 *_biq);
 

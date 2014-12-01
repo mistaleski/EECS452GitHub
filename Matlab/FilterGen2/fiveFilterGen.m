@@ -9,6 +9,15 @@ SOS =  MakeSOS_ThreeBand( );
 
 dB = [35, 13.5, 12.7, 8, 10];
 
+fd = fopen('filters.h', 'w');
+fprintf(fd, '#ifndef THREEBANDFILTERS_H_\n');
+fprintf(fd, '#define THREEBANDFILTERS_H_\n');
+
+fprintf(fd, 'static const Int32 ThreeBandfilters[%d] = {\n\n', xsize*ysize);
+
+
+
+
 for i = 1:xsize
         Q = 15;
 
@@ -57,7 +66,15 @@ for i = 1:xsize
         A1_Q13 = round(((2^Q) * A1) - 1);
         A2_Q13 = round(((2^Q) * A2) - 1);
     
-    fprintf(1,'{%d, %d, %d, %d, %d, %d};\n', B0_Q13, B1_Q13, ...
-    B2_Q13, A0_Q13, A1_Q13, A2_Q13);
-    
+        if i ~= xsize
+            fprintf(fd,'%d,\n %d,\n %d,\n %d,\n %d,\n %d,\n\n', ...
+                B0_Q13, B1_Q13, B2_Q13, A0_Q13, A1_Q13, A2_Q13);
+        else
+            fprintf(fd,'%d,\n %d,\n %d,\n %d,\n %d,\n %d\n};\n', ...
+                B0_Q13, B1_Q13, B2_Q13, A0_Q13, A1_Q13, A2_Q13);
+        end
+        
 end
+
+fprintf(fd, '#endif //THREEBANDFILTERS_H_\n');
+    
