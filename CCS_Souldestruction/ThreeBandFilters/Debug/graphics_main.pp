@@ -17,6 +17,9 @@ graphics_main.obj: C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/include/mathl.h
 graphics_main.obj: C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/include/unaccess.h
 graphics_main.obj: ../tunable_filter.h
 graphics_main.obj: ../filters.h
+graphics_main.obj: H:/github/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/sar.h
+graphics_main.obj: ../LED.h
+graphics_main.obj: C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/include/stdlib.h
 
 ../graphics_main.c: 
 C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/include/stdlib.h: 
@@ -35,3 +38,6 @@ C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/include/mathl.h:
 C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/include/unaccess.h: 
 ../tunable_filter.h: 
 ../filters.h: 
+H:/github/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/sar.h: 
+../LED.h: 
+C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/include/stdlib.h: 

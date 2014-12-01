@@ -10,6 +10,7 @@ ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
 "./tunable_filter.obj" \
 "./graphics_main.obj" \
+"./LED.obj" \
 "./C5515_eZdsp.obj" \
 -l"H:/github/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/usbstk5515bsl.lib" \
 -l"H:/github/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/452_Labs_Essentials.lib" \
@@ -127,8 +128,8 @@ ThreeBandFilters.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(C5500_EXECUTABLE_OUTPUTS__QUOTED) "ThreeBandFilters.out"
-	-$(RM) "C5515_eZdsp.pp" "graphics_main.pp" "tunable_filter.pp" 
-	-$(RM) "C5515_eZdsp.obj" "graphics_main.obj" "tunable_filter.obj" 
+	-$(RM) "C5515_eZdsp.pp" "LED.pp" "graphics_main.pp" "tunable_filter.pp" 
+	-$(RM) "C5515_eZdsp.obj" "LED.obj" "graphics_main.obj" "tunable_filter.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

@@ -6,22 +6,45 @@
 #include <stdio.h>
 #include <math.h>
 #include "tunable_filter.h"
+#include <sar.h>
+#include "LED.h"
 
 #define FOREVER 1
 #define PI 3.14159265
 
+#define SARCTRL      ((ioport volatile unsigned*)0x7012)
+#define SARDATA      ((ioport volatile unsigned*)0x7014)
+#define SARCLKCTRL   ((ioport volatile unsigned*)0x7016)
+#define SARPINCTRL   ((ioport volatile unsigned*)0x7018)
+#define SARGPOCTRL   ((ioport volatile unsigned*)0x701A)
 
-Uint32 Counter;
+#define ADCBUSY 0x8000
 
+#define NUM_FILTERS 5
 
+Int16 output;
+Int16 biq[6 * NUM_FILTERS];
+Int16 myBuff[4 * NUM_FILTERS];
+Int32 scale[5];
 
 void Reset();
 
-Int16 output;
-
 interrupt void I2S_ISR()
 {
-	// do nothing
+	int i;
+	Int16 x[1];
+	Int16  left = 0;
+
+	AIC_read2(x,&left);
+	AIC_write2(output,output);
+
+	output = 0;
+	for(i=0; i<NUM_FILTERS; ++i)
+	{
+		output += (((Int32)(IIR_DF1(left, &biq[i*BIQ_COEFF], &myBuff[i*4]) >> 2))*scale[i]) >> 10;
+	}
+
+	IFR0 &= (1 << I2S_BIT_POS);//Clear interrupt Flag
 }
 
 // Setup AIC interrupt routine.
@@ -38,23 +61,60 @@ void I2S_interrupt_setup(void)
 	IFR0 &= (1 << I2S_BIT_POS);
 }
 
+// @param data is the array to be filled with ADC values. Min size 4*sizeof(Uint16).
+void Read_all(Uint16 *data)
+{
+    Uint16 i, j,failsafe;
+
+	// Poll each channel
+	for(i=0; i<4; ++i )
+	{
+
+		failsafe = 1000;
+		// Wait for previous conversion to finish
+		while((*SARDATA) & ADCBUSY);
+
+		*SARCTRL = 0x0C00 + ((i+2) & 7) << 12;//(void*)(addrs[i]);
+
+		*SARCTRL |= 0x8000;
+
+		while(!((*SARDATA) & ADCBUSY))
+		{
+				if(!(--failsafe))
+				{
+					break;
+				}
+		}
+
+		// Wait for conversion to finish
+		while((*SARDATA) & ADCBUSY);
+
+		// Get data
+		data[i] = (*SARDATA) & 0x03FF;
+		*SARCTRL &= ~0x8000;
+
+		for(j=0; j<1000; ++j)
+		{
+			asm("	nop");
+		}
+	}
+}
+
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // MAIN CODE - starts here
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define NUM_FILTERS 5
 
 void main(void)
 {
-    int i;
+    int i, j;
+    Uint16 data[4];
 
-    Int32 scale[5] = {815, 815, 815, 815, 815};
-
-	Int16 x[1];
-	Int16  left = 0;
-	Int16  output = 0;
-	Int16 biq[6 * NUM_FILTERS];
-	Int16 myBuff[4 * NUM_FILTERS];
+    // unity gain
+    for(i=0; i<NUM_FILTERS; ++i)
+    {
+    	scale[i] = 408;
+    }
 
    	_disable_interrupts();
     InitSystem();
@@ -62,25 +122,31 @@ void main(void)
    	USBSTK5515_init();
    	AIC_init();
    	I2S_interrupt_setup();
+   	Init_SAR();
+   	My_LED_init();
+   	_enable_interrupts();
 
+   	output = 0;
+
+   	*SARPINCTRL &= ~0x8000;
 
    	for(i=0; i<NUM_FILTERS; ++i)
    	{
    		redefineFilter(i, &biq[i*BIQ_COEFF]);
    	}
 
-		output = 0;
-
     while(FOREVER)
     {
+    	Read_all(data);
+        //for(i=0; i<NUM_FILTERS; ++i)
+        //{
+        //	scale[i] = data[0];
+        //}
+    	scale[0] = data[0]; // Bass
+    	scale[2] = data[2]; // Mid
+    	scale[4] = data[3]; // Treble
 
-    	AIC_read2(x,&left);
-    	output = 0;
-    	for(i=0; i<NUM_FILTERS; ++i)
-    	{
-    		output += (((Int32)(IIR_DF1(left, &biq[i*BIQ_COEFF], &myBuff[i*4]) >> 2))*scale[i]) >> 11;
-    	}
-    	AIC_write2(output,output);
+    	toggle_LED(0);
     }
 
         TERMINATE:
