@@ -7,7 +7,9 @@ SOS =  MakeSOS_SixBand( );
 
 [xsize ysize] = size(SOS);
 
-dB = [16.8, 13, 12, 8.3, 7];
+dB = [32.82, 38.73, 25.17, 30.91, 23.21, 17.93, 15.86, 12.29, 13.11, 9.50];
+
+fs = 48000;
 
 fd = fopen('SixBandfilters.h', 'w');
 fprintf(fd, '#ifndef SIXBANDFILTERS_H_\n');
@@ -29,49 +31,91 @@ for i = 1:2:xsize
         A2 = SOS(i,6);
         
         D0 = SOS(i+1,1);
-        D1 = SOS(i+1,1);
-        D2 = SOS(i+1,1);
-        C0 = SOS(i+1,1);
-        C1 = SOS(i+1,1);
-        C2 = SOS(i+1,1);
+        D1 = SOS(i+1,2);
+        D2 = SOS(i+1,3);
+        C0 = SOS(i+1,4);
+        C1 = SOS(i+1,5);
+        C2 = SOS(i+1,6);
     
     
     if i == 1
-        normalize_coeff = ((A0 + A1 + A2)*(C0 + C1 + C2)) / ((B0 + B1 + B2)*(D0 + D1 + D2));
-
+        normalize_coeff = (A0 + A1 + A2) / (B0 + B1 + B2);
+        normalize_coeff2 = (C0 + C1 + C2)/ (D0 + D1 + D2);
+        
         B0 = B0 * normalize_coeff;
         B1 = B1 * normalize_coeff;
         B2 = B2 * normalize_coeff;
-        D0 = D0 * normalize_coeff;
-        D1 = D1 * normalize_coeff;
-        D2 = D2 * normalize_coeff;
-
-
-    else
-        normalize_coeff = (1./(10.^(dB((i-1)/2)./20)));
-
-        B0 = B0 * normalize_coeff;
-        B1 = B1 * normalize_coeff;
-        B2 = B2 * normalize_coeff;
+       
+        D0 = D0 * normalize_coeff2;
+        D1 = D1 * normalize_coeff2;
+        D2 = D2 * normalize_coeff2;
         
-        D0 = D0 * normalize_coeff;
-        D1 = D1 * normalize_coeff;
-        D2 = D2 * normalize_coeff;
-        
-        % figure(round(i/32) + 1);
         [b,a] = sos2tf([ B0 B1 B2 A0 A1 A2; D0 D1 D2 C0 C1 C2 ]);
         [h,w] = freqz(b,a,2001);
         
-               
-        plot(w/pi,20*log10(abs(h)));
+        
+        
+       semilogx(w/(2*pi)*fs,20*log10(abs(h)));
+       axis([20 20000 -20 0]);
+       hold on
+        %figure(1);   
+        
+
+      %plot(w/pi,h);
+       
+
+
+    else
+        normalize_coeff = (1./(10.^(dB((i-2))./20)));
+        normalize_coeff2 = (1./(10.^(dB((i-1))./20)));
+
+        
+        B0 = B0 * normalize_coeff;
+        B1 = B1 * normalize_coeff;
+        B2 = B2 * normalize_coeff;
+        
+        D0 = D0 * normalize_coeff2;
+        D1 = D1 * normalize_coeff2;
+        D2 = D2 * normalize_coeff2;
+        
+        % figure(round(i/32) + 1);
+        [b,a] = sos2tf([ B0 B1 B2 A0 A1 A2]);
+        [d,c] = sos2tf([ D0 D1 D2 C0 C1 C2 ]);
+        [h,w] = freqz(b,a,5001);
+        [h2,w2] = freqz(d,c,5001);
+        20*log10(real(max(h)));
+        20*log10(real(max(h2)));
+        
+        
+        [ beta, alpha] = sos2tf([ B0 B1 B2 A0 A1 A2;D0 D1 D2 C0 C1 C2 ]);
+     
+        [h3, w3] = freqz(beta,alpha,5001);
+          boost = 1/max(abs(h3));
+          round(boost*32768)
+       
+
+       semilogx(w3/(2*pi)*fs,20*log10(boost*abs(h3)));
+        %axis([20 60000 -20 0])
+       % hold on
         %plot(w/pi,h2);
-        hold on;
+       % hold on;
         ax = gca;
         %ax.YLim = [-100 20];
-        %ax.XTick = 0:.5:2;
-        xlabel('Normalized Frequency (\times\pi rad/sample)')
+        %ax.XTick = 0:.5:2;\
+        %{
+        figure(i);
+        plot(w/pi,20*log10(abs(h)));
+        hold on
+        
+        plot(w2/pi,20*log10(abs(h2)),'r');
+      %}
+        
+        %xlabel('Normalized Frequency (\times\pi rad/sample)')
         %ylabel('Magnitude (dB)')
+
     end
+
+        
     
         B0_Q13 = round(((2^Q) * B0) - 1);
         B1_Q13 = round(((2^Q) * B1) - 1);
