@@ -7,14 +7,17 @@ SOS =  MakeSOS_ThreeBand( );
 
 [xsize ysize] = size(SOS);
 
-dB = [35, 13.5, 12.7, 8, 10];
+dB = [34.6, 13, 12.3, 7.6, 9.5];
 
-fd = fopen('filters.h', 'w');
+fd = fopen('ThreeBandfilters.h', 'w');
 fprintf(fd, '#ifndef THREEBANDFILTERS_H_\n');
 fprintf(fd, '#define THREEBANDFILTERS_H_\n');
 
 fprintf(fd, 'static const Int32 ThreeBandfilters[%d] = {\n\n', xsize*ysize);
 
+
+colorArray = ['b'; 'r'; 'k'; 'g'; 'm' ;'c'];
+colorArray2 = ['--b'; '--r'; '--k'; '--g'; '--m'; '--c'];
 
 
 
@@ -35,7 +38,17 @@ for i = 1:xsize
         B0 = B0 * normalize_coeff;
         B1 = B1 * normalize_coeff;
         B2 = B2 * normalize_coeff;
-
+      
+        [b,a] = sos2tf([ B0 B1 B2 A0 A1 A2 ]);
+        [h,w] = freqz(b,a,2001);
+        
+       semilogx(w/(2*pi)*fs,20*log10(abs(h))+8, colorArray(i), 'linewidth', 3);
+       axis([20 20000 -20 8]);
+       xlabel('Frequency (Hz)');
+       ylabel('Magnitude (dB)');
+       title('5 Band EQ Range (8dB Swing)');
+       hold on
+       semilogx(w/(2*pi)*fs,20*log10(abs(h))-8, colorArray2(i,:), 'linewidth', 3);
 
     else
         normalize_coeff = (1./(10.^(dB(i-1)./20)));
@@ -48,14 +61,14 @@ for i = 1:xsize
         [b,a] = sos2tf([ B0 B1 B2 A0 A1 A2 ]);
         [h,w] = freqz(b,a,2001);
         
-               
-        plot(w/pi,20*log10(abs(h)));
-        %plot(w/pi,h2);
-        hold on;
+        semilogx(w/(2*pi)*fs,20*log10(abs(h))+8, colorArray(i,:), 'linewidth', 3);       
+        if i ==1 || i ==3 || i==5
+            semilogx(w/(2*pi)*fs,20*log10(abs(h))-8, colorArray2(i,:), 'linewidth', 3);
+        end
         ax = gca;
         %ax.YLim = [-100 20];
         %ax.XTick = 0:.5:2;
-        xlabel('Normalized Frequency (\times\pi rad/sample)')
+ 
         %ylabel('Magnitude (dB)')
     end
     

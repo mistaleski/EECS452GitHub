@@ -86,14 +86,4 @@ static const Int32 SixBandfilters[72] = {
  -7746,
  10813
 };
-
-#define BIQ_COEFF 6
-
-#define ADJUST_BAND_1  32768 //multiply by band
-#define ADJUST_BAND_2  73800
-#define ADJUST_BAND_3  73873
-#define ADJUST_BAND_4  74332
-#define ADJUST_BAND_5  76306
-#define ADJUST_BAND_6  101726
-
 #endif //SIXBANDFILTERS_H_

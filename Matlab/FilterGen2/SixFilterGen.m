@@ -18,7 +18,8 @@ fprintf(fd, '#define SIXBANDFILTERS_H_\n');
 fprintf(fd, 'static const Int32 SixBandfilters[%d] = {\n\n', xsize*ysize);
 
 
-
+colorArray = ['b'; 'r'; 'k'; 'g'; 'm' ;'c'];
+colorArray2 = ['--b'; '--r'; '--k'; '--g'; '--m'; '--c'];
 
 for i = 1:2:xsize
         Q = 15;
@@ -55,9 +56,13 @@ for i = 1:2:xsize
         
         
         
-       semilogx(w/(2*pi)*fs,20*log10(abs(h)));
-       axis([20 20000 -20 0]);
+       semilogx(w/(2*pi)*fs,20*log10(abs(h))+7, colorArray(i), 'linewidth', 3);
+       axis([20 20000 -20 7]);
+       xlabel('Frequency (Hz)');
+       ylabel('Magnitude (dB)');
+       title('6 Band EQ Range (7dB Swing)');
        hold on
+       semilogx(w/(2*pi)*fs,20*log10(abs(h))-7, colorArray2(i,:), 'linewidth', 3);       
         %figure(1);   
         
 
@@ -94,7 +99,8 @@ for i = 1:2:xsize
           round(boost*32768)
        
 
-       semilogx(w3/(2*pi)*fs,20*log10(boost*abs(h3)));
+       semilogx(w3/(2*pi)*fs,20*log10(boost*abs(h3))+7, colorArray((i+1)/2), 'linewidth', 3);
+       semilogx(w3/(2*pi)*fs,20*log10(boost*abs(h3))-7, colorArray2((i+1)/2,:),'linewidth', 3);       
         %axis([20 60000 -20 0])
        % hold on
         %plot(w/pi,h2);
