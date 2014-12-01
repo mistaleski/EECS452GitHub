@@ -1,7 +1,9 @@
-%clear
-%close all
+clear
+close all
 clf
 clc;
+
+fs = 48000
 
 SOS =  MakeSOS_ThreeBand( );
 
@@ -61,9 +63,12 @@ for i = 1:xsize
         [b,a] = sos2tf([ B0 B1 B2 A0 A1 A2 ]);
         [h,w] = freqz(b,a,2001);
         
-        semilogx(w/(2*pi)*fs,20*log10(abs(h))+8, colorArray(i,:), 'linewidth', 3);       
+               
         if i ==1 || i ==3 || i==5
+            semilogx(w/(2*pi)*fs,20*log10(abs(h))+8, colorArray(i,:), 'linewidth', 3);
             semilogx(w/(2*pi)*fs,20*log10(abs(h))-8, colorArray2(i,:), 'linewidth', 3);
+        else 
+            semilogx(w/(2*pi)*fs,20*log10(abs(h)), colorArray(i,:), 'linewidth', 3);
         end
         ax = gca;
         %ax.YLim = [-100 20];

@@ -14,7 +14,6 @@
 Uint32 Counter;
 
 
-
 void Reset();
 
 Int16 output;
@@ -49,9 +48,29 @@ void main(void)
 	Int16 x[1];
 	Int16  left = 0;
 	Int16  output = 0;
-	Int16 biq[6];
-	Int16 myBuff[4];
-	Int32 myFilter[6] = {13044, -1, -13046, 32767, 17886, 4313};
+	Int16  temp = 0;
+	Int16  temp2 = 0;
+	Int16 biq[6],biq2[6];
+	Int16 myBuff[4],myBuff2[4];
+	Int32 myFilter[6] = {
+			1806,
+			 -1,
+			 -1808,
+			 32767,
+			 -60861,
+			 29150
+	};
+
+	Int32 myFilter2[6] = {
+			932,
+			 -1,
+			 -934,
+			 32767,
+			 -63398,
+			 30900
+	};
+
+	Int32 adjust = 73873;
 
    	_disable_interrupts();
     InitSystem();
@@ -69,14 +88,26 @@ void main(void)
 	biq[4] =  (Int16)(myFilter[4] >> 1);		//a1
 	biq[5] =  (Int16)(myFilter[5] >> 1);		//a2
 
+	biq2[0] =  (Int16)(myFilter2[0] >> 1);		//b0
+	biq2[1] =  (Int16)(myFilter2[1] >> 1);		//b1
+	biq2[2] =  (Int16)(myFilter2[2] >> 1);		//b2
+
+	biq2[3] =  (Int16)(myFilter2[3] >> 1);		//a0  -- this one is actually ignored.
+	biq2[4] =  (Int16)(myFilter2[4] >> 1);		//a1
+	biq2[5] =  (Int16)(myFilter2[5] >> 1);		//a2
+
 		output = 0;
+		temp = 0;
+		temp2 = 0;
 
     while(FOREVER)
     {
 
     	AIC_read2(x,&left);
     	//output = left;
-    	output = IIR_DF1(left, biq, myBuff);
+    	temp = IIR_DF1(left, biq, myBuff);
+    	temp2 = IIR_DF1(temp, biq, myBuff);
+    	output = (((Int32)temp2) * adjust) >> 15;
     	AIC_write2(output,output);
     }
 
