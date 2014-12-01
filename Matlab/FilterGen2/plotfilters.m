@@ -13,7 +13,7 @@ tempFooLength = length(tempFoo);
 loglog(tempFoo(1,1:tempFooLength/2))
 Ave = mean(tempFoo(1,1:tempFooLength/2));
 % Constants
-NUMFILTERS = 7;
+NUMFILTERS = 6;
 
 numBQ = 2;
 [mySOS] = MakeSOS(numBQ);
