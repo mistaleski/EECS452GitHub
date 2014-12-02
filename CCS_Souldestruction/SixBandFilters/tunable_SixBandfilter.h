@@ -27,9 +27,7 @@ static const Int32 adjust[NUM_FILTERS] = {
 
 
 
-
-Int16 IIR_DF1(Int16 input, Int16 *_biq, Int16 *delay_buff);
-void redefineFilter(Uint16 FILTER_SELECT, Int16 *_biq);
+void redefineFilter(Uint16 FILTER_SELECT, Uint16 *_biq);
 
 
 #endif /* TUNABLE_SIXBANDFILTER_H_ */

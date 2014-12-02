@@ -53,24 +53,24 @@ void main(void)
 	Int16 biq[6],biq2[6];
 	Int16 myBuff[4],myBuff2[4];
 	Int32 myFilter[6] = {
-			1806,
-			 -1,
-			 -1808,
+			8,
+			 17,
+			 8,
 			 32767,
-			 -60861,
-			 29150
+			 -64682,
+			 31947
 	};
 
 	Int32 myFilter2[6] = {
-			932,
-			 -1,
-			 -934,
+			8,
+			 16,
+			 8,
 			 32767,
-			 -63398,
-			 30900
+			 -63557,
+			 30822
 	};
 
-	Int32 adjust = 73873;
+	Int32 adjust = 32768;
 
    	_disable_interrupts();
     InitSystem();
@@ -100,15 +100,20 @@ void main(void)
 		temp = 0;
 		temp2 = 0;
 
+//#define PASSTHROUGH
+
     while(FOREVER)
     {
 
     	AIC_read2(x,&left);
-    	//output = left;
-    	temp = IIR_DF1(left, biq, myBuff);
-    	temp2 = IIR_DF1(temp, biq, myBuff);
-    	output = (((Int32)temp2) * adjust) >> 15;
     	AIC_write2(output,output);
+#ifdef PASSTHROUGH
+    	output = left;
+#else
+    	temp = IIR_DF1(left, biq, myBuff);
+    	temp2 = IIR_DF1(temp, biq2, myBuff2);
+   	output = (((Int32)temp2) * adjust) >> 15;
+#endif
     }
 
         TERMINATE:

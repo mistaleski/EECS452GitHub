@@ -8,7 +8,7 @@ SOS =  MakeSOS_SixBand( );
 [xsize ysize] = size(SOS);
 
 dB = [32.82, 38.73, 25.17, 30.91, 23.21, 17.93, 15.86, 12.29, 13.11, 9.50];
-
+dB = dB+1;
 fs = 48000;
 
 fd = fopen('SixBandfilters.h', 'w');
@@ -143,7 +143,7 @@ for i = 1:2:xsize
             fprintf(fd,'%d,\n %d,\n %d,\n %d,\n %d,\n %d,\n\n', ...
                 D0_Q13, D1_Q13, D2_Q13, C0_Q13, C1_Q13, C2_Q13);
         elseif i == xsize-1
-            fprintf(fd,'%d,\n %d,\n %d,\n %d,\n %d,\n %d\n\n', ...
+            fprintf(fd,'%d,\n %d,\n %d,\n %d,\n %d,\n %d,\n\n', ...
                 B0_Q13, B1_Q13, B2_Q13, A0_Q13, A1_Q13, A2_Q13);
             fprintf(fd,'%d,\n %d,\n %d,\n %d,\n %d,\n %d\n};\n', ...
                 D0_Q13, D1_Q13, D2_Q13, C0_Q13, C1_Q13, C2_Q13);            

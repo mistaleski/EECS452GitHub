@@ -47,11 +47,15 @@ interrupt void I2S_ISR()
 	output = 0;
 	for(i=0; i<1; ++i)
 	{
-		iircas5(&left, biq, &temp16, myBuff, NUM_BIQUADS, 1);
-		temp32 = (Int32)temp16;
-		temp32 = ((temp32*adjust[i]) >> 15); // Filter Internal Scale
-		temp32 = ((temp32*scale[i]) >> 15); // User Scale
-		output += (Int16)(temp32 >> 4);
+		Uint8 flag = iircas51(&left, biq, &temp16, myBuff, 1, 1);
+		if(flag == 1)
+		{
+			//while(1);
+		}
+		output = temp16;
+		//temp32 = ((temp32*adjust[i]) >> 15); // Filter Internal Scale
+		//temp32 = ((temp32*scale[i]) >> 15); // User Scale
+		//output += (Int16)(temp32 >> 4);
 	}
 
 	IFR0 &= (1 << I2S_BIT_POS);//Clear interrupt Flag
@@ -81,6 +85,11 @@ void main(void)
 {
     int i, j;
     Uint16 data[4];
+
+    for(i=0; i<2 * NUM_BIQUADS + 1; ++i)
+    {
+    	myBuff[i] = 0;
+    }
 
     // unity gain
     for(i=0; i<NUM_FILTERS; ++i)
@@ -113,6 +122,7 @@ void main(void)
 
     while(FOREVER)
     {
+    	/*
     	key = Get_Key_Human();
 		if(key == SW1)
 		{
@@ -149,6 +159,7 @@ void main(void)
 				asm("	nop");
 			}
 		}
+		*/
     }
 
         TERMINATE:
