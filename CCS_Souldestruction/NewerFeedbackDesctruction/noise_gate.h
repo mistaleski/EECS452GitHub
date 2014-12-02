@@ -35,13 +35,14 @@
 //  - add a way to average samples to find the threshold value needed
 //  - apply button functionality to this threshold function; reanalysis any time
 //  - what happens when the you are ramping up and the value falls below threshold?
+
 int noise_gate(int input, int threshold, int attack_time_ms, int decay_time_ms, int hold_time_ms);
 
 /**
  * Implements a noise gate with the default parameters
  * @param input is the next sample of input audio
  * @return the next sample of the output from the noise gate
- * @see noise_gate for full description of noise gate functionalty
+ * @see noise_gate for full description of noise gate functionality
  */
 int noise_gate_default(int input);
 
