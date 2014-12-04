@@ -8,15 +8,12 @@ CG_TOOL_ROOT := c:/ti/ccsv6/tools/compiler/c5500_4.4.1
 
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
-"./AdaptiveNotch.obj" \
 "./C5515_eZdsp.obj" \
 "./FFT.obj" \
-"./LED.obj" \
 "./Spi.obj" \
 "./XVGA.obj" \
-"./graphics_main.obj" \
-"./noise_gate.obj" \
-"./tunable_filter.obj" \
+"./main_broken.obj" \
+"./recordSweep.obj" \
 "../lnkx.cmd" \
 -l"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/usbstk5515bsl.lib" \
 -l"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/452_Labs_Essentials.lib" \
@@ -119,28 +116,28 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-ADCtest.out \
+sweep_record.out \
 
 EXE_OUTPUTS__QUOTED += \
-"ADCtest.out" \
+"sweep_record.out" \
 
 
 # All Target
-all: ADCtest.out
+all: sweep_record.out
 
 # Tool invocations
-ADCtest.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
+sweep_record.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: C5500 Linker'
-	"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/bin/cl55" -v5515 --memory_model=large -O3 -g --display_error_number --diag_warning=225 --ptrdiff_size=16 -z -m"ADCtest.map" -i"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/lib" -i"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/Tunable_IIR_Filter/TunableFilter" -i"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/include" -i"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support" --reread_libs --warn_sections --xml_link_info="ADCtest_linkInfo.xml" --rom_model -o "ADCtest.out" $(ORDERED_OBJS)
+	"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/bin/cl55" -v5515 --memory_model=large -g --display_error_number --diag_warning=225 --ptrdiff_size=16 -z -m"sweep_record.map" -i"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/lib" -i"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/include" -i"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support" --reread_libs --warn_sections --xml_link_info="sweep_record_linkInfo.xml" --rom_model -o "sweep_record.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "AdaptiveNotch.pp" "C5515_eZdsp.pp" "FFT.pp" "LED.pp" "Spi.pp" "XVGA.pp" "graphics_main.pp" "noise_gate.pp" "tunable_filter.pp" 
-	-$(RM) "AdaptiveNotch.obj" "C5515_eZdsp.obj" "FFT.obj" "LED.obj" "Spi.obj" "XVGA.obj" "graphics_main.obj" "noise_gate.obj" "tunable_filter.obj" 
+	-$(RM) "C5515_eZdsp.pp" "FFT.pp" "Spi.pp" "XVGA.pp" "main_broken.pp" "recordSweep.pp" 
+	-$(RM) "C5515_eZdsp.obj" "FFT.obj" "Spi.obj" "XVGA.obj" "main_broken.obj" "recordSweep.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
