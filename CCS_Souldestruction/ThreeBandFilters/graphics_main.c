@@ -41,7 +41,7 @@ interrupt void I2S_ISR()
 	output = 0;
 	for(i=0; i<NUM_FILTERS; ++i)
 	{
-		output += (((Int32)(IIR_DF1(left, &biq[i*BIQ_COEFF], &myBuff[i*4]) >> 2))*scale[i]) >> 10;
+		output += (((Int32)(IIR_DF1(left, &biq[i*BIQ_COEFF], &myBuff[i*4]) >> 2))*scale[i]) >> 14;
 	}
 
 	IFR0 &= (1 << I2S_BIT_POS);//Clear interrupt Flag
@@ -109,11 +109,13 @@ void main(void)
 {
     int i, j;
     Uint16 data[4];
+    Uint32 Coeff[3];
 
     // unity gain
+
     for(i=0; i<NUM_FILTERS; ++i)
     {
-    	scale[i] = 408;
+    	scale[i] = 6528;
     }
 
    	_disable_interrupts();
@@ -135,16 +137,20 @@ void main(void)
    		redefineFilter(i, &biq[i*BIQ_COEFF]);
    	}
 
+   	Coeff[0] = 2608;//163; Q14(*16)
+   	Coeff[1] = 17; //1.22857 Q14(*16); Slope for base
+   	Coeff[2] = 12;//0.86; Q14(*16) Slope for other 2
+
     while(FOREVER)
     {
     	Read_all(data);
-        //for(i=0; i<NUM_FILTERS; ++i)
-        //{
-        //	scale[i] = data[0];
-        //}
-    	scale[0] = data[0]; // Bass
-    	scale[2] = data[2]; // Mid
-    	scale[4] = data[3]; // Treble
+
+    	//scale[0] = data[0];
+    	//scale[2] = data[2];
+    	//scale[4] = data[3];
+    	scale[0] = Coeff[0] + (Coeff[1]*(Uint32)data[0]); // Bass
+    	scale[2] = Coeff[0] + (Coeff[2]*(Uint32)data[2]); // Mid
+    	scale[4] = Coeff[0] + (Coeff[2]*(Uint32)data[3]); // Treble
 
     	toggle_LED(0);
     }

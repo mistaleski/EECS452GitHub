@@ -4,19 +4,19 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := c:/ti/ccsv6/tools/compiler/c5500_4.4.1
+CG_TOOL_ROOT := C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1
 
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
-"./C5515_eZdsp.obj" \
-"./LED.obj" \
-"./graphics_main.obj" \
 "./tunable_filter.obj" \
-"../lnkx.cmd" \
--l"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/usbstk5515bsl.lib" \
--l"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/452_Labs_Essentials.lib" \
--l"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/55xdspx_LARGE.lib" \
+"./graphics_main.obj" \
+"./LED.obj" \
+"./C5515_eZdsp.obj" \
+-l"H:/github/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/usbstk5515bsl.lib" \
+-l"H:/github/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/452_Labs_Essentials.lib" \
+-l"H:/github/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/55xdspx_LARGE.lib" \
 -l"rts55x.lib" \
+"../lnkx.cmd" \
 
 -include ../makefile.init
 
@@ -113,12 +113,6 @@ endif
 -include ../makefile.defs
 
 # Add inputs and outputs from these tool invocations to the build variables 
-EXE_OUTPUTS += \
-ThreeBandFilters.out \
-
-EXE_OUTPUTS__QUOTED += \
-"ThreeBandFilters.out" \
-
 
 # All Target
 all: ThreeBandFilters.out
@@ -127,13 +121,13 @@ all: ThreeBandFilters.out
 ThreeBandFilters.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: C5500 Linker'
-	"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/bin/cl55" -v5515 --memory_model=large -O3 -g --display_error_number --diag_warning=225 --ptrdiff_size=16 -z -m"ThreeBandFilters.map" -i"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/lib" -i"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/include" -i"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support" --reread_libs --warn_sections --xml_link_info="ThreeBandFilters_linkInfo.xml" --rom_model -o "ThreeBandFilters.out" $(ORDERED_OBJS)
+	"C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/bin/cl55" -v5515 --memory_model=large -O3 -g --display_error_number --diag_warning=225 --ptrdiff_size=16 -z -m"ThreeBandFilters.map" -i"C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/lib" -i"C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/include" -i"H:/github/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support" --reread_libs --warn_sections --xml_link_info="ThreeBandFilters_linkInfo.xml" --rom_model -o "ThreeBandFilters.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(EXE_OUTPUTS__QUOTED)
+	-$(RM) $(C5500_EXECUTABLE_OUTPUTS__QUOTED) "ThreeBandFilters.out"
 	-$(RM) "C5515_eZdsp.pp" "LED.pp" "graphics_main.pp" "tunable_filter.pp" 
 	-$(RM) "C5515_eZdsp.obj" "LED.obj" "graphics_main.obj" "tunable_filter.obj" 
 	-@echo 'Finished clean'
@@ -143,4 +137,3 @@ clean:
 .SECONDARY:
 
 -include ../makefile.targets
-
