@@ -41,7 +41,7 @@ interrupt void I2S_ISR()
 	output = 0;
 	for(i=0; i<NUM_FILTERS; ++i)
 	{
-		output += (((Int32)(IIR_DF1(left, &biq[i*BIQ_COEFF], &myBuff[i*4]) >> 2))*scale[i]) >> 10;
+		output += (((Int32)(IIR_DF1(left, &biq[i*BIQ_COEFF], &myBuff[i*4]) >> 2))*scale[i]) >> 14;
 	}
 
 	IFR0 &= (1 << I2S_BIT_POS);//Clear interrupt Flag
@@ -112,12 +112,12 @@ void main(void)
     Uint32 Coeff[3];
 
     // unity gain
-    /*
+
     for(i=0; i<NUM_FILTERS; ++i)
     {
-    	scale[i] = 408;
+    	scale[i] = 6528;
     }
-	*/
+
    	_disable_interrupts();
     InitSystem();
     ConfigPort();
@@ -145,12 +145,12 @@ void main(void)
     {
     	Read_all(data);
 
-    	scale[0] = data[0];
-    	scale[2] = data[2];
-    	scale[4] = data[3];
-    	//scale[0] = Coeff[0] + ((Coeff[1]*(Uint32)data[0]) >> 10); // Bass
-    	//scale[2] = Coeff[0] + ((Coeff[2]*(Uint32)data[2]) >> 10); // Mid
-    	//scale[4] = Coeff[0] + ((Coeff[2]*(Uint32)data[3]) >> 10); // Treble
+    	//scale[0] = data[0];
+    	//scale[2] = data[2];
+    	//scale[4] = data[3];
+    	scale[0] = Coeff[0] + (Coeff[1]*(Uint32)data[0]); // Bass
+    	scale[2] = Coeff[0] + (Coeff[2]*(Uint32)data[2]); // Mid
+    	scale[4] = Coeff[0] + (Coeff[2]*(Uint32)data[3]); // Treble
 
     	toggle_LED(0);
     }
