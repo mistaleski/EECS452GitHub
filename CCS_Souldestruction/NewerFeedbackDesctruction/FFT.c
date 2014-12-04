@@ -67,7 +67,7 @@ void showFFT(Int32 *maxIndex, Int32 *max)
 	Uint16 n;
 
 	//Find magnitude of X(n/2).
-	GoTo(100,0);
+	GoTo(FFT_DRAW_OFFSET,0);
 	for (n = 0; n < FFTSIZE; n = n + 2)
 	{
 		tmp = ((Int32)pDONE[n]*pDONE[n]) + ((Int32)pDONE[n+1] * pDONE[n+1]);
@@ -76,7 +76,8 @@ void showFFT(Int32 *maxIndex, Int32 *max)
 						 // range.  But now we need to check for overflow.
 		AMP = tmp2>32767?32767:tmp2<-32768?-32768:tmp2; // amplitude of the output sine wave
 		// Reg[n >> 1] = AMP;
-		Draw(BLUE,100+n/2, AMP >> 4 );
+		Draw(BLUE,FFT_DRAW_OFFSET+n, AMP >> 4 );
+		Draw(BLUE,FFT_DRAW_OFFSET+n + 1, AMP >> 4 );
 
 		if(AMP > *max)
 		{

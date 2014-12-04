@@ -4,24 +4,25 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1
+CG_TOOL_ROOT := c:/ti/ccsv6/tools/compiler/c5500_4.4.1
 
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
-"./tunable_filter.obj" \
-"./noise_gate.obj" \
-"./graphics_main.obj" \
-"./XVGA.obj" \
-"./Spi.obj" \
-"./LED.obj" \
-"./FFT.obj" \
-"./C5515_eZdsp.obj" \
 "./AdaptiveNotch.obj" \
--l"H:/github/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/usbstk5515bsl.lib" \
--l"H:/github/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/452_Labs_Essentials.lib" \
--l"H:/github/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/55xdspx_LARGE.lib" \
--l"rts55x.lib" \
+"./C5515_eZdsp.obj" \
+"./FFT.obj" \
+"./LED.obj" \
+"./Spi.obj" \
+"./XVGA.obj" \
+"./graphics_main.obj" \
+"./noise_gate.obj" \
+"./tunable_filter.obj" \
+"./visuals.obj" \
 "../lnkx.cmd" \
+-l"rts55x.lib" \
+-l"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/usbstk5515bsl.lib" \
+-l"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/452_Labs_Essentials.lib" \
+-l"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/55xdspx_LARGE.lib" \
 
 -include ../makefile.init
 
@@ -118,6 +119,18 @@ endif
 -include ../makefile.defs
 
 # Add inputs and outputs from these tool invocations to the build variables 
+EXE_OUTPUTS += \
+NewerFeedbackDesctruction.out \
+
+EXE_OUTPUTS__QUOTED += \
+"NewerFeedbackDesctruction.out" \
+
+BIN_OUTPUTS += \
+NewerFeedbackDesctruction.hex \
+
+BIN_OUTPUTS__QUOTED += \
+"NewerFeedbackDesctruction.hex" \
+
 
 # All Target
 all: NewerFeedbackDesctruction.out
@@ -126,15 +139,21 @@ all: NewerFeedbackDesctruction.out
 NewerFeedbackDesctruction.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: C5500 Linker'
-	"C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/bin/cl55" -v5515 --memory_model=large -O3 -g --display_error_number --diag_warning=225 --ptrdiff_size=16 -z -m"NewerFeedbackDesctruction.map" -i"C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/lib" -i"H:/github/EECS452GitHub/CCS_Souldestruction/Tunable_IIR_Filter/TunableFilter" -i"C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/include" -i"H:/github/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support" --reread_libs --warn_sections --rom_model -o "NewerFeedbackDesctruction.out" $(ORDERED_OBJS)
+	"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/bin/cl55" -v5515 --memory_model=large -O3 -g --define=c5515 --display_error_number --diag_warning=225 --ptrdiff_size=16 -z -m"NewerFeedbackDesctruction.map" --stack_size=0x200 --heap_size=0x400 -i"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/lib" -i"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/Tunable_IIR_Filter/TunableFilter" -i"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/include" -i"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support" --reread_libs --warn_sections --xml_link_info="NewerFeedbackDesctruction_linkInfo.xml" --rom_model --sys_stacksize=0x200 -o "NewerFeedbackDesctruction.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
+	@echo ' '
+
+NewerFeedbackDesctruction.hex: $(EXE_OUTPUTS)
+	@echo 'Invoking: C5500 Hex Utility'
+	"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/bin/hex55"  -o "NewerFeedbackDesctruction.hex" $(EXE_OUTPUTS__QUOTED)
+	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(C5500_EXECUTABLE_OUTPUTS__QUOTED) "NewerFeedbackDesctruction.out"
-	-$(RM) "AdaptiveNotch.pp" "C5515_eZdsp.pp" "FFT.pp" "LED.pp" "Spi.pp" "XVGA.pp" "graphics_main.pp" "noise_gate.pp" "tunable_filter.pp" 
-	-$(RM) "AdaptiveNotch.obj" "C5515_eZdsp.obj" "FFT.obj" "LED.obj" "Spi.obj" "XVGA.obj" "graphics_main.obj" "noise_gate.obj" "tunable_filter.obj" 
+	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
+	-$(RM) "AdaptiveNotch.pp" "C5515_eZdsp.pp" "FFT.pp" "LED.pp" "Spi.pp" "XVGA.pp" "graphics_main.pp" "noise_gate.pp" "tunable_filter.pp" "visuals.pp" 
+	-$(RM) "AdaptiveNotch.obj" "C5515_eZdsp.obj" "FFT.obj" "LED.obj" "Spi.obj" "XVGA.obj" "graphics_main.obj" "noise_gate.obj" "tunable_filter.obj" "visuals.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
@@ -142,3 +161,4 @@ clean:
 .SECONDARY:
 
 -include ../makefile.targets
+

@@ -8,6 +8,8 @@
 #ifndef FFT_H_
 #define FFT_H_
 
+#define FFT_DRAW_OFFSET 63
+
 #include <stdlib.h>
 #include <usbstk5515.h>
 #include <Dsplib.h>

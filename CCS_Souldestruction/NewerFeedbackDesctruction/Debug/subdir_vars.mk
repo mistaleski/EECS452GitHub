@@ -15,7 +15,8 @@ C_SRCS += \
 ../XVGA.c \
 ../graphics_main.c \
 ../noise_gate.c \
-../tunable_filter.c 
+../tunable_filter.c \
+../visuals.c 
 
 OBJS += \
 ./AdaptiveNotch.obj \
@@ -26,7 +27,8 @@ OBJS += \
 ./XVGA.obj \
 ./graphics_main.obj \
 ./noise_gate.obj \
-./tunable_filter.obj 
+./tunable_filter.obj \
+./visuals.obj 
 
 C_DEPS += \
 ./AdaptiveNotch.pp \
@@ -37,7 +39,8 @@ C_DEPS += \
 ./XVGA.pp \
 ./graphics_main.pp \
 ./noise_gate.pp \
-./tunable_filter.pp 
+./tunable_filter.pp \
+./visuals.pp 
 
 C_DEPS__QUOTED += \
 "AdaptiveNotch.pp" \
@@ -48,7 +51,8 @@ C_DEPS__QUOTED += \
 "XVGA.pp" \
 "graphics_main.pp" \
 "noise_gate.pp" \
-"tunable_filter.pp" 
+"tunable_filter.pp" \
+"visuals.pp" 
 
 OBJS__QUOTED += \
 "AdaptiveNotch.obj" \
@@ -59,7 +63,8 @@ OBJS__QUOTED += \
 "XVGA.obj" \
 "graphics_main.obj" \
 "noise_gate.obj" \
-"tunable_filter.obj" 
+"tunable_filter.obj" \
+"visuals.obj" 
 
 C_SRCS__QUOTED += \
 "../AdaptiveNotch.c" \
@@ -70,6 +75,7 @@ C_SRCS__QUOTED += \
 "../XVGA.c" \
 "../graphics_main.c" \
 "../noise_gate.c" \
-"../tunable_filter.c" 
+"../tunable_filter.c" \
+"../visuals.c" 
 
 

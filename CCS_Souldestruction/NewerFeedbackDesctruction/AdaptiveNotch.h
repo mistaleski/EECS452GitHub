@@ -12,6 +12,7 @@
 #include <usbstk5515.h>
 #include "tunable_filter.h"
 #include "XVGA.h"
+#include "FFT.h"
 
 #define NUM_CANCELERS 3
 //

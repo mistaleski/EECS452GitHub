@@ -9,6 +9,7 @@
 #include <sar.h>
 #include "XVGA.h"
 #include "noise_gate.h"
+#include "visuals.h"
 
 #include "FFT.h"
 #include "tunable_filter.h"
@@ -140,6 +141,7 @@ void main(void)
 		    max = 0;
 			maxIndex = 512;
 			showFFT(&maxIndex, &max); // extract max value and index
+			visuals(gateOn, filterOn);
 			start_switch = 0;
 
 			// ---- Adjust notch filters if needed ----
