@@ -9,7 +9,7 @@
     A1 = SOS(5);
     A2 = SOS(6);
     
-    normalize_coeff = (A0 + A1 + A2) / (B0 + B1 + B2);
+    normalize_coeff = 0.25;%(A0 + A1 + A2) / (B0 + B1 + B2);
     
     B0 = B0 * normalize_coeff;
     B1 = B1 * normalize_coeff;
@@ -27,6 +27,7 @@
         B2_Q13, A0_Q13, A1_Q13, A2_Q13);
     
     figure(1);
+    clf;
     [b,a] = sos2tf([ B0 B1 B2 A0 A1 A2 ]);
     [h,w] = freqz(b,a,2001);
 
@@ -35,9 +36,10 @@
         A1_Q13/2^Q A2_Q13/2^Q ]);
     [h2,w2] = freqz(b2,a2,2001);
 
-    plot(w/pi,20*log10(abs(h)));
+    %20*log10
+    plot(w/pi,(abs(h)));
     hold on;
-    plot(w2/pi,20*log10(abs(h2)), 'r');
+    plot(w2/pi,(abs(h2)), 'r');
     ax = gca;
     ax.YLim = [-100 20];
     ax.XTick = 0:.5:2;

@@ -9,6 +9,7 @@ CG_TOOL_ROOT := C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
 "./tunable_SixBandfilter.obj" \
+"./iircas51new.obj" \
 "./graphics_main.obj" \
 "./LED.obj" \
 "./C5515_eZdsp.obj" \
@@ -129,7 +130,8 @@ SixBandFilters.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 clean:
 	-$(RM) $(C5500_EXECUTABLE_OUTPUTS__QUOTED) "SixBandFilters.out"
 	-$(RM) "C5515_eZdsp.pp" "LED.pp" "graphics_main.pp" "tunable_SixBandfilter.pp" 
-	-$(RM) "C5515_eZdsp.obj" "LED.obj" "graphics_main.obj" "tunable_SixBandfilter.obj" 
+	-$(RM) "C5515_eZdsp.obj" "LED.obj" "graphics_main.obj" "iircas51new.obj" "tunable_SixBandfilter.obj" 
+	-$(RM) "iircas51new.pp" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

@@ -51,7 +51,8 @@ void main(void)
 	Int16  temp = 0;
 	Int16  temp2 = 0;
 	Int16 biq[6],biq2[6];
-	Int16 myBuff[4],myBuff2[4];
+	Int16 myBuff[4]  = {{0}};
+	Int16 myBuff2[4] = {{0}};
 	Int32 myFilter[6] = {
 			8,
 			 17,
@@ -110,9 +111,10 @@ void main(void)
 #ifdef PASSTHROUGH
     	output = left;
 #else
-    	temp = IIR_DF1(left, biq, myBuff);
-    	temp2 = IIR_DF1(temp, biq2, myBuff2);
-   	output = (((Int32)temp2) * adjust) >> 15;
+    	left = 9132;
+    	/*temp*/ output = (IIR_DF1(left, biq, myBuff));
+    	//output = (IIR_DF1(temp, biq2, myBuff2));
+   	//output = (((Int32)temp2) * adjust) >> 15;
 #endif
     }
 

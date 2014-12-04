@@ -24,6 +24,13 @@ graphics_main.obj: ../graphics_main.c $(GEN_OPTS) $(GEN_SRCS)
 	@echo 'Finished building: $<'
 	@echo ' '
 
+iircas51new.obj: ../iircas51new.asm $(GEN_OPTS) $(GEN_SRCS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: C5500 Compiler'
+	"C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/bin/cl55" -v5515 --memory_model=large -O3 -g --include_path="C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/include" --include_path="H:/github/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support" --display_error_number --diag_warning=225 --ptrdiff_size=16 --preproc_with_compile --preproc_dependency="iircas51new.pp" $(GEN_OPTS__FLAG) "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
 tunable_SixBandfilter.obj: ../tunable_SixBandfilter.c $(GEN_OPTS) $(GEN_SRCS)
 	@echo 'Building file: $<'
 	@echo 'Invoking: C5500 Compiler'
