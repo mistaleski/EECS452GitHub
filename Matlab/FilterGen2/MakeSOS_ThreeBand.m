@@ -2,7 +2,7 @@ function [ SOS ] = MakeSOS_ThreeBand( )
 
 %% const
 filterNum = 5;
-fBands = [20, 200,500,5e3, 10e3, 20e3];
+fBands = [20, 300,700,2e3, 4e3, 20e3];
 Fs = 48000;
 
 %% Analysis
