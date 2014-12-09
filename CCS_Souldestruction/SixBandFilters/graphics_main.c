@@ -25,7 +25,7 @@
 
 Int16 output;
 Int16 biq[BIQ_COEFF * NUM_BIQUADS];
-Int16 myBuff[2 * NUM_BIQUADS + 1];
+Int16 myBuff[4];
 Int32 scale[NUM_FILTERS];
 
 void Reset();
@@ -35,6 +35,7 @@ interrupt void I2S_ISR()
 	int i;
 	Int16 x[1];
 	Int16  left = 0;
+	Int16 in;
 	Int16 temp16;
 	Int32 temp32;
 
@@ -42,21 +43,21 @@ interrupt void I2S_ISR()
 	AIC_read2(x,&left);
 	AIC_write2(output,output);
 
-#define FILTNUM 0
+	in = 9132;//left;
 
 	output = 0;
-	for(i=0; i<1; ++i)
-	{
-		Uint8 flag = iircas51(&left, biq, &temp16, myBuff, 1, 1);
+	//for(i=0; i<1; ++i)
+	//{
+		Uint8 flag = iircas51(&in, biq, &output, myBuff, 1, 1);
 		if(flag == 1)
 		{
-			//while(1);
+			while(1);
 		}
-		output = temp16;
+		//output = temp16;
 		//temp32 = ((temp32*adjust[i]) >> 15); // Filter Internal Scale
 		//temp32 = ((temp32*scale[i]) >> 15); // User Scale
 		//output += (Int16)(temp32 >> 4);
-	}
+	//}
 
 	IFR0 &= (1 << I2S_BIT_POS);//Clear interrupt Flag
 }
@@ -80,13 +81,32 @@ void I2S_interrupt_setup(void)
 // MAIN CODE - starts here
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+Int32 myFilter[6] = //{8191, 16383, 8191, 32767, -59487, 27229};
+{
+		8,
+		 17,
+		 8,
+		 32767,
+		 -64682,
+		 31947
+};
+
+
+Int32 myFilter2[6] = {
+		8,
+		 16,
+		 8,
+		 32767,
+		 -63557,
+		 30822
+};
 
 void main(void)
 {
     int i, j;
     Uint16 data[4];
 
-    for(i=0; i<2 * NUM_BIQUADS + 1; ++i)
+    for(i=0; i<4; ++i)
     {
     	myBuff[i] = 0;
     }
@@ -112,12 +132,24 @@ void main(void)
 
    	*SARPINCTRL &= ~0x8000;
 
-   	for(i=0; i<NUM_FILTERS; ++i)
-   	{
-   		redefineFilter(i, &biq[i*BIQ_COEFF*2]);
-   	}
+   //	for(i=0; i<NUM_FILTERS; ++i)
+   //	{
+   //		redefineFilter(i, &biq[i*BIQ_COEFF*2]);
+   //	}
 
-   	Uint8 filtNum = 0;
+	biq[0] =  (Int16)(myFilter[0] >> 1);		//b0
+	biq[1] =  (Int16)(myFilter[1] >> 1);		//b1
+	biq[2] =  (Int16)(myFilter[2] >> 1);		//b2
+	biq[3] =  (Int16)(myFilter[4] >> 1);		//a1
+	biq[4] =  (Int16)(myFilter[5] >> 1);		//a2
+
+	biq[5] =  (Int16)(myFilter2[0] >> 1);		//b0
+	biq[6] =  (Int16)(myFilter2[1] >> 1);		//b1
+	biq[7] =  (Int16)(myFilter2[2] >> 1);		//b2
+	biq[8] =  (Int16)(myFilter2[4] >> 1);		//a1
+	biq[9] =  (Int16)(myFilter2[5] >> 1);		//a2
+
+	Uint8 filtNum = 0;
    	Uint8 key;
 
     while(FOREVER)

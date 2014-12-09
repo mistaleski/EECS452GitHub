@@ -37,7 +37,8 @@ Int16 IIR_DF1(Int16 input, Int16 *_biq, Int16 *delay_buff) {
 				// and Z-1 blocks and multiply them by the 16-bit Q13 coeffs
 				// to get a 32-bit Q28.
 
-		Int32 temp42 = Acc >> 14;
+		Int32 temp42 = Acc << 2;
+		temp42 = temp42 >> 16;
 		Acc = temp42 > 32767 ? 32767 : temp42 < -32768 ? -32768 : temp42; // Converts to a 16-bit Q15 with rounding and saturation.
 
 		//updates the various delay blocks
