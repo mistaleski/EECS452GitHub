@@ -9,8 +9,7 @@ SOS =  MakeSOS_ThreeBand( );
 
 [xsize ysize] = size(SOS);
 
-dB = [34.6, 13, 12.3, 7.6, 9.5];
-
+dB = [32, 22.5, 19, 4.5, 15];
 fd = fopen('ThreeBandfilters.h', 'w');
 fprintf(fd, '#ifndef THREEBANDFILTERS_H_\n');
 fprintf(fd, '#define THREEBANDFILTERS_H_\n');
