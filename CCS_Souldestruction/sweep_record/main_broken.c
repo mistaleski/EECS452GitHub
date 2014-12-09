@@ -83,15 +83,23 @@ void recordSweep(Uint32 _min_freq, Uint32 _max_freq, Uint32 fs, Int16 *in);
 //=======================
 
 
-#define BUFSIZE 512
+#define BUFSIZE 16384
 #define fs 48000UL
 
-DATA *pOUT;//Pointers to Current buffers
+DATA left, right, out;
+
+Int32 myAvg[512];
+Int16 mypFFT[16384];
+DATA mypOUT[1024];//Pointers to Current buffers
+Int16 sweepResult[16384];
 DATA AMP;
+Uint16 counter = 0;
 void Reset();
 
 interrupt void I2S_ISR(){
-	asm("	nop"); // GOTCHA
+	AIC_read2(&left, &right);
+	AIC_write2(left, left);
+
 	IFR0 &= (1 << I2S_BIT_POS);//Clear interrupt Flag
 }
 
@@ -112,12 +120,11 @@ void I2S_interrupt_setup(void)
 	IFR0 &= (1 << I2S_BIT_POS);
 }
 
-Int16 sweepResult[16384];
+//Int16 sweepResult[16384];
 
 void main(void)
 {
-	Uint32 i;
-	Int16 POUT[1024];
+	Uint32 i, j;
 	Int32 maxIndex, max;
 	unsigned int start_switch = 1;
 
@@ -126,21 +133,20 @@ void main(void)
   	AIC_init();
   	I2S_interrupt_setup();
   	InitSpi();
+	XVGAinit(start_switch);
+	start_switch = 0;
 
-  	recordSweep(20, 20000, fs, sweepResult);
+  	recordSweep(2000, 20000, fs, sweepResult);
 
   	for(i=0; i<16384; ++i)
   	{
   		AIC_write2(sweepResult[i] ,sweepResult[i]);
   	}
 
-  	initFFT(sweepResult, 0, pOUT);
-  	processFFT();
 	XVGAinit(start_switch);
-    max = 0;
+	processFFT(sweepResult, mypOUT, myAvg);
+	max = 0;
 	maxIndex = 512;
-    showFFT(&maxIndex, &max);
-    start_switch = 0;
 
 /*
   	//Do cfft with scaling.

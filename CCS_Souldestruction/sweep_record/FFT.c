@@ -7,102 +7,62 @@
 
 #include "FFT.h"
 
-Uint16 fftCounter;
 
-DATA *pAIC, *pFFT, *pDONE;//Pointers to Current buffers
-
-void initFFT(DATA *_pAIC, DATA *_pFFT, DATA *_pDONE)
-{
-    pAIC = &_pAIC[0];
-   	pFFT = &_pFFT[0];
-   	pDONE = &_pDONE[0];
-   	fftCounter = 0;
-}
-
-Uint8 processFFT()
+Uint8 processFFT(DATA *pFFT, DATA *pDONE, Uint32 *avgs)
 {
 	DATA *temp1;
-	Uint16 b;
-
-	if(!FFTready())
-	{
-		return 1;
-	}
-	else
-	{
-		//Rotate buffers
-		temp1= pFFT;
-		pFFT = pAIC;
-		pAIC = temp1;
-
-		// apply Chebyshvev filter
-		for (b=0; b < 512; b = b+1)
-		{
-			pFFT[b] = ((Int32)pFFT[b]*(Int32)chebwin512[b]) >>15;
-		}
-
-		//Do cfft with scaling.
-		cfft_SCALE(pFFT, FFTSIZE);
-		cbrev(pFFT, pDONE, FFTSIZE);
-	}
-	return 0;
-}
-
-Uint8 FFTready()
-{
-	if(fftCounter >= FFTSIZE*2)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-void showFFT(Int32 *maxIndex, Int32 *max)
-{
+	Uint16 b, i;
 	DATA AMP;
 	Int32 tmp,tmp2;
 	Uint16 n;
 
-	//Find magnitude of X(n/2).
-	GoTo(FFT_DRAW_OFFSET,0);
-	for (n = 0; n < FFTSIZE; n = n + 2)
+	for(i=0; i<FFTSIZE; ++i)
 	{
-		tmp = ((Int32)pDONE[n]*pDONE[n]) + ((Int32)pDONE[n+1] * pDONE[n+1]);
-		tmp2 = FFracSqrt(tmp);
-		tmp2 = tmp2 >> 14;  // Should really be >>15.  Done for larger dynamic
-						 // range.  But now we need to check for overflow.
-		AMP = tmp2>32767?32767:tmp2<-32768?-32768:tmp2; // amplitude of the output sine wave
-		// Reg[n >> 1] = AMP;
-		Draw(BLUE,FFT_DRAW_OFFSET+n, AMP >> 4 );
-		Draw(BLUE,FFT_DRAW_OFFSET+n + 1, AMP >> 4 );
+		avgs[i] = 0;
+	}
 
-		if(AMP > *max)
+	// Draw
+	GoTo(FFT_DRAW_OFFSET,0);
+
+	// Take 16 1024-point FFTs
+	for(i = 0; i < 16; ++i)
+	{
+		// apply Chebyshvev filter
+		for (b=0; b < 512; b = b+1)
 		{
-			*max = AMP;
-			*maxIndex = n >> 1;
+			pFFT[i*1024+b] = ((Int32)pFFT[i*1024+b]*(Int32)chebwin512[b]) >>15;
 		}
 
+		//Do cfft with scaling.
+		cfft_SCALE((pFFT+(i*1024)), FFTSIZE);
+		cbrev((pFFT+(i*1024)), pDONE, FFTSIZE);
+
+		for (n = 0; n < FFTSIZE; n = n + 2)
+		{
+			tmp = ((Int32)pDONE[n]*pDONE[n]) + ((Int32)pDONE[n+1] * pDONE[n+1]);
+			tmp2 = FFracSqrt(tmp);
+			tmp2 = tmp2 >> 14;  // Should really be >>15.  Done for larger dynamic
+							 // range.  But now we need to check for overflow.
+			AMP = tmp2>32767?32767:tmp2<-32768?-32768:tmp2; // amplitude of the output sine wave
+			avgs[n] += (Int32) AMP;
+			//if(i == 0)
+			//{
+			//	Draw(BLUE,FFT_DRAW_OFFSET+n, AMP);
+			//	Draw(BLUE,FFT_DRAW_OFFSET+(n+1), AMP);
+			//}
+		}
 	}
 
-	fftCounter = 0;
-
-}
-
-
-Uint8 queueFFT(Int16 x)
-{
-	if(fftCounter < (FFTSIZE*2))
+	for(i=0; i<FFTSIZE; ++i)
 	{
-		pAIC[fftCounter] = x;  //Only use evens for FFT function
-		pAIC[fftCounter+1] = 0;	//No imaginary part
-		fftCounter += 2;
-		return 0;
+		avgs[i] = avgs[i]; //>> 8;
+		Draw(BLUE,FFT_DRAW_OFFSET+i, avgs[i]);
+		Draw(BLUE,FFT_DRAW_OFFSET+(i+1), avgs[i]);
 	}
-	return 1;
+
+	return 0;
 }
+
 
 long FFracSqrt(long x)
 {

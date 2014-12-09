@@ -36,7 +36,7 @@ void recordSweep(Uint32 _min_freq, Uint32 _max_freq, Uint32 fs, Int16 *in)
   		out = (sinetable[counter>>23]);
   		AIC_write2(out,out);
   		AIC_read2(&right, &left);
-  		in[i]= right;
+  		in[i]= out;
   	}
 }
 
