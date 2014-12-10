@@ -6,7 +6,7 @@
 /// @param in is a 16384 element array that will be loaded with the recorded data
 /// @prereq I2S interrupts are disabled
 /// @return 0 for success, nonzero for failure (TODO: error checking)
-void recordSweep(Uint32 _min_freq, Uint32 _max_freq, Uint32 fs, Int16 *in)
+void recordSweep(Uint32 _min_freq, Uint32 _max_freq, Uint32 fs, Int16 *in, Int32 *avg)
 {
 	Uint32 FTV, FTV_max, step, i, counter;
 	Int16 out, left, right;
@@ -25,6 +25,15 @@ void recordSweep(Uint32 _min_freq, Uint32 _max_freq, Uint32 fs, Int16 *in)
   	//Init FTV variables
   	counter = 0;
 
+  	// Pre-tone
+  	for(i=0; i<16384; ++i)
+  	 {
+  		counter = counter + FTV;
+  		out = (sinetable[counter>>23]);
+  		AIC_write2(out,out);
+  		AIC_read2(&left, &right);
+  	 }
+
   	//Generate Sweep
   	for(i=0; i<16384; ++i)
   	{
@@ -35,8 +44,29 @@ void recordSweep(Uint32 _min_freq, Uint32 _max_freq, Uint32 fs, Int16 *in)
   		counter = counter + FTV;
   		out = (sinetable[counter>>23]);
   		AIC_write2(out,out);
-  		AIC_read2(&right, &left);
-  		in[i]= out;
+  		AIC_read2(&left, &right);
+  		in[i]= left;
   	}
+
+  	// Post-tone
+  	for(i=0; i<16384; ++i)
+  	 {
+  		counter = counter + FTV;
+  		out = (sinetable[counter>>23]);
+  		AIC_write2(out,out);
+  		AIC_read2(&left, &right);
+  	 }
+
+#ifdef SWEEPREC_DEBUG
+  	// Playback
+  	for(i=0; i<16384; ++i)
+  	{
+  		AIC_write2(in[i] ,in[i]);
+  	}
+#endif
+
+	XVGAinit(0);
+	processFFT(in, mypOUT, avg);
+
 }
 

@@ -1,7 +1,7 @@
 #ifndef CHEBWIN512_H_
 #define CHEBWIN512_H_
 
-Int16 chebwin512[512] = {
+static const Int16 chebwin512[512] = {
 36, //1
 10, //2
 12, //3

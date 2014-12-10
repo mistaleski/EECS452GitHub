@@ -10,7 +10,6 @@
 
 Uint8 processFFT(DATA *pFFT, DATA *pDONE, Uint32 *avgs)
 {
-	DATA *temp1;
 	Uint16 b, i;
 	DATA AMP;
 	Int32 tmp,tmp2;
@@ -37,6 +36,10 @@ Uint8 processFFT(DATA *pFFT, DATA *pDONE, Uint32 *avgs)
 		cfft_SCALE((pFFT+(i*1024)), FFTSIZE);
 		cbrev((pFFT+(i*1024)), pDONE, FFTSIZE);
 
+#ifdef SWEEPREC_DEBUG
+		XVGAinit(0);
+#endif // DEBUG
+		GoTo(FFT_DRAW_OFFSET,0);
 		for (n = 0; n < FFTSIZE; n = n + 2)
 		{
 			tmp = ((Int32)pDONE[n]*pDONE[n]) + ((Int32)pDONE[n+1] * pDONE[n+1]);
@@ -44,21 +47,23 @@ Uint8 processFFT(DATA *pFFT, DATA *pDONE, Uint32 *avgs)
 			tmp2 = tmp2 >> 14;  // Should really be >>15.  Done for larger dynamic
 							 // range.  But now we need to check for overflow.
 			AMP = tmp2>32767?32767:tmp2<-32768?-32768:tmp2; // amplitude of the output sine wave
-			avgs[n] += (Int32) AMP;
-			//if(i == 0)
-			//{
-			//	Draw(BLUE,FFT_DRAW_OFFSET+n, AMP);
-			//	Draw(BLUE,FFT_DRAW_OFFSET+(n+1), AMP);
-			//}
+			avgs[n>>1] += (Int32) AMP;
+#ifdef SWEEPREC_DEBUG
+			Draw(BLUE,FFT_DRAW_OFFSET+(n>>1), AMP >> 4);
+			Draw(BLUE,FFT_DRAW_OFFSET+((n>>1)+1), AMP >> 4);
+#endif // DEBUG
 		}
 	}
 
+	XVGAinit(0);
+	GoTo(FFT_DRAW_OFFSET,0);
 	for(i=0; i<FFTSIZE; ++i)
 	{
-		avgs[i] = avgs[i]; //>> 8;
-		Draw(BLUE,FFT_DRAW_OFFSET+i, avgs[i]);
-		Draw(BLUE,FFT_DRAW_OFFSET+(i+1), avgs[i]);
+		avgs[i] = avgs[i] >> 4;
+		Draw(BLUE,FFT_DRAW_OFFSET+i, avgs[i] >> 4);
+		Draw(BLUE,FFT_DRAW_OFFSET+(i+1), avgs[i] >> 4);
 	}
+	XVGAinit(0);
 
 	return 0;
 }
