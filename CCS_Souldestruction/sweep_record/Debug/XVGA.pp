@@ -1,7 +1,7 @@
 # FIXED
 
 XVGA.obj: ../XVGA.c
-XVGA.obj: C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/usbstk5515.h
+XVGA.obj: H:/eecs452/CCS_workspace/C5515_Support_Files/452_Support/usbstk5515.h
 
 ../XVGA.c: 
-C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/usbstk5515.h: 
+H:/eecs452/CCS_workspace/C5515_Support_Files/452_Support/usbstk5515.h: 

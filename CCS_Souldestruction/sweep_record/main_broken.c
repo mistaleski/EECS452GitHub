@@ -29,7 +29,8 @@ void ConfigPort(void);	// added
 
 DATA left, right, out;
 
-Int32 finalAvgs[8];
+Int32 finalAvgs[6];
+Int32 finalLog[6];
 Int32 myAvg[512];
 Int16 mypFFT[16384];
 Int16 sweepResult[16384];
@@ -76,6 +77,11 @@ void main(void)
   	recordSweep(40, 20000, fs, sweepResult, myAvg);
 
   	averageFFT512to6(myAvg, finalAvgs);
+
+	Uint16 j;
+	static Uint32 maxL, avgL, totL;
+	maxL = 0;
+	totL = 0;
 
 	while(1){}
 }
