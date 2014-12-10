@@ -11,6 +11,7 @@ C_SRCS += \
 ../FFT.c \
 ../Spi.c \
 ../XVGA.c \
+../avgFFT512to6.c \
 ../main_broken.c \
 ../recordSweep.c 
 
@@ -19,6 +20,7 @@ OBJS += \
 ./FFT.obj \
 ./Spi.obj \
 ./XVGA.obj \
+./avgFFT512to6.obj \
 ./main_broken.obj \
 ./recordSweep.obj 
 
@@ -27,6 +29,7 @@ C_DEPS += \
 ./FFT.pp \
 ./Spi.pp \
 ./XVGA.pp \
+./avgFFT512to6.pp \
 ./main_broken.pp \
 ./recordSweep.pp 
 
@@ -35,6 +38,7 @@ C_DEPS__QUOTED += \
 "FFT.pp" \
 "Spi.pp" \
 "XVGA.pp" \
+"avgFFT512to6.pp" \
 "main_broken.pp" \
 "recordSweep.pp" 
 
@@ -43,6 +47,7 @@ OBJS__QUOTED += \
 "FFT.obj" \
 "Spi.obj" \
 "XVGA.obj" \
+"avgFFT512to6.obj" \
 "main_broken.obj" \
 "recordSweep.obj" 
 
@@ -51,6 +56,7 @@ C_SRCS__QUOTED += \
 "../FFT.c" \
 "../Spi.c" \
 "../XVGA.c" \
+"../avgFFT512to6.c" \
 "../main_broken.c" \
 "../recordSweep.c" 
 

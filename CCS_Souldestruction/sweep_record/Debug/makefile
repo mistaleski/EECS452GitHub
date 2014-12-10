@@ -4,21 +4,22 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := c:/ti/ccsv6/tools/compiler/c5500_4.4.1
+CG_TOOL_ROOT := C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1
 
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
-"./C5515_eZdsp.obj" \
-"./FFT.obj" \
-"./Spi.obj" \
-"./XVGA.obj" \
-"./main_broken.obj" \
 "./recordSweep.obj" \
-"../lnkx.cmd" \
--l"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/usbstk5515bsl.lib" \
--l"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/452_Labs_Essentials.lib" \
--l"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support/55xdspx_LARGE.lib" \
+"./main_broken.obj" \
+"./avgFFT512to6.obj" \
+"./XVGA.obj" \
+"./Spi.obj" \
+"./FFT.obj" \
+"./C5515_eZdsp.obj" \
+-l"H:/eecs452/CCS_workspace/C5515_Support_Files/452_Support/usbstk5515bsl.lib" \
+-l"H:/eecs452/CCS_workspace/C5515_Support_Files/452_Support/452_Labs_Essentials.lib" \
+-l"H:/eecs452/CCS_workspace/C5515_Support_Files/452_Support/55xdspx_LARGE.lib" \
 -l"rts55x.lib" \
+"../lnkx.cmd" \
 
 -include ../makefile.init
 
@@ -115,12 +116,6 @@ endif
 -include ../makefile.defs
 
 # Add inputs and outputs from these tool invocations to the build variables 
-EXE_OUTPUTS += \
-sweep_record.out \
-
-EXE_OUTPUTS__QUOTED += \
-"sweep_record.out" \
-
 
 # All Target
 all: sweep_record.out
@@ -129,15 +124,15 @@ all: sweep_record.out
 sweep_record.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: C5500 Linker'
-	"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/bin/cl55" -v5515 --memory_model=large -g --display_error_number --diag_warning=225 --ptrdiff_size=16 -z -m"sweep_record.map" -i"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/lib" -i"c:/ti/ccsv6/tools/compiler/c5500_4.4.1/include" -i"C:/Users/Pomakov/Documents/GitHub/EECS452GitHub/CCS_Souldestruction/C5515_Support_Files/452_Support" --reread_libs --warn_sections --xml_link_info="sweep_record_linkInfo.xml" --rom_model -o "sweep_record.out" $(ORDERED_OBJS)
+	"C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/bin/cl55" -v5515 --memory_model=large -g --display_error_number --diag_warning=225 --ptrdiff_size=16 -z -m"sweep_record.map" -i"C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/lib" -i"C:/SW/ti/ccsv5/tools/compiler/c5500_4.4.1/include" -i"H:/eecs452/CCS_workspace/C5515_Support_Files/452_Support" --reread_libs --warn_sections --xml_link_info="sweep_record_linkInfo.xml" --rom_model -o "sweep_record.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "C5515_eZdsp.pp" "FFT.pp" "Spi.pp" "XVGA.pp" "main_broken.pp" "recordSweep.pp" 
-	-$(RM) "C5515_eZdsp.obj" "FFT.obj" "Spi.obj" "XVGA.obj" "main_broken.obj" "recordSweep.obj" 
+	-$(RM) $(C5500_EXECUTABLE_OUTPUTS__QUOTED) "sweep_record.out"
+	-$(RM) "C5515_eZdsp.pp" "FFT.pp" "Spi.pp" "XVGA.pp" "avgFFT512to6.pp" "main_broken.pp" "recordSweep.pp" 
+	-$(RM) "C5515_eZdsp.obj" "FFT.obj" "Spi.obj" "XVGA.obj" "avgFFT512to6.obj" "main_broken.obj" "recordSweep.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
@@ -145,4 +140,3 @@ clean:
 .SECONDARY:
 
 -include ../makefile.targets
-
