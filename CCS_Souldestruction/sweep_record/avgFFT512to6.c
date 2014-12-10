@@ -8,12 +8,13 @@
 #include "avgFFT512to6.h"
 
 
-void averageFFT512to6(Int32 *myFFT512, Int32 *myAvgs6)
+void averageFFT512to6(Int32 *myFFT512, Int32 *myAvgs6, Uint32 *min)
 {
 
 	Uint16 i,j;
 	Uint16 index = 0;
 	Uint32 tot;
+	Uint32 total, minF, maxF, avg;
 
 	for(i=0; i<NUMAVGBINS; ++i)
 	{
@@ -35,7 +36,6 @@ void averageFFT512to6(Int32 *myFFT512, Int32 *myAvgs6)
 		Draw(BLUE,FFT_DRAW_OFFSET+binsBounds[i+1], 0);
 	}
 
-	static Uint32 total, minF, maxF, avg;
 	total = 0;
 	maxF = 0;
 	minF = 4294967290;
@@ -55,12 +55,14 @@ void averageFFT512to6(Int32 *myFFT512, Int32 *myAvgs6)
 	}
 	avg = total/((Int32)6);				// calculate the average of all bins
 
-	GoTo(10, (Int16)(avg >> 3));		// plot AVG bin line
-	Draw(BLUE,629, (Int16)(avg >> 3));
-	GoTo(10, (Int16)(maxF >> 3));		// plot MAX bin line
-	Draw(BLUE,629, (maxF >> 3));
-	GoTo(10, (Int16)(minF >> 3));		// plot MIN bin line
-	Draw(BLUE,629, (minF >> 3));
+//	GoTo(10, (Int16)(avg >> 3));		// plot AVG bin line
+//	Draw(BLUE,629, (Int16)(avg >> 3));
+//	GoTo(10, (Int16)(maxF >> 3));		// plot MAX bin line
+//	Draw(BLUE,629, (maxF >> 3));
+//	GoTo(10, (Int16)(minF >> 3));		// plot MIN bin line
+//	Draw(BLUE,629, (minF >> 3));
+
+	*min = minF;
 
 	XVGAinit(0);
 

@@ -30,10 +30,12 @@ void ConfigPort(void);	// added
 DATA left, right, out;
 
 Int32 finalAvgs[6];
+Int32 finalCorrections[6];
 Int32 finalLog[6];
 Int32 myAvg[512];
 Int16 mypFFT[16384];
 Int16 sweepResult[16384];
+Int32 temp;
 DATA AMP;
 Uint16 counter = 0;
 void Reset();
@@ -61,9 +63,19 @@ void I2S_interrupt_setup(void)
 
 //Int16 sweepResult[16384];
 
+// -14 dB
+#define MINVAL 3269
+
 void main(void)
 {
 	unsigned int start_switch = 1;
+	Uint16 i, j;
+	Uint32 myMin;
+
+	for(i=0; i<6; ++i)
+	{
+		finalCorrections[i]=16384;
+	}
 
    	_disable_interrupts();
   	USBSTK5515_init();
@@ -76,12 +88,26 @@ void main(void)
 
   	recordSweep(40, 20000, fs, sweepResult, myAvg);
 
-  	averageFFT512to6(myAvg, finalAvgs);
+  	averageFFT512to6(myAvg, finalAvgs, &myMin);
 
-	Uint16 j;
-	static Uint32 maxL, avgL, totL;
-	maxL = 0;
-	totL = 0;
+  	for(i=0; i<6; ++i)
+  	{
+  		finalCorrections[i] = (myMin<<14)/finalAvgs[i]; // Q14 - division factor
+  		if(finalCorrections[i] < MINVAL)
+  		{
+  			finalCorrections[i] = MINVAL;
+  		}
+  	}
+
+
+	GoTo(FFT_DRAW_OFFSET,0);
+	for(i=0; i<NUMAVGBINS; ++i)
+	{
+		Draw(BLUE,FFT_DRAW_OFFSET+binsBounds[i], (Int16)(finalCorrections[i] >> 6));
+		Draw(BLUE,FFT_DRAW_OFFSET+binsBounds[i+1], (Int16)(finalCorrections[i] >> 6));
+		Draw(BLUE,FFT_DRAW_OFFSET+binsBounds[i+1], 0);
+	}
+	XVGAinit(start_switch);
 
 	while(1){}
 }

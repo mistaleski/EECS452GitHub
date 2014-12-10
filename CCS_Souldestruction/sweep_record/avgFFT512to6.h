@@ -25,7 +25,7 @@
 	255
 	};
 
-void averageFFT512to6(Int32 *myFFT512, Int32 *myAvgs6);
+void averageFFT512to6(Int32 *myFFT512, Int32 *myAvgs6, Uint32 *min);
 
 
 #endif /* AVGFFT512TO8_H_ */
